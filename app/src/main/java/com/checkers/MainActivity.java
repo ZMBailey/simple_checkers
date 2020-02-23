@@ -3,7 +3,6 @@ package com.checkers;
 import androidx.appcompat.app.AppCompatActivity;
 //import android.content.DialogInterface;
 import android.content.res.Configuration;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.graphics.Point;
 //import android.support.v7.app.AppCompatActivity;
@@ -72,11 +71,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private GradientDrawable getBorder(int bg,int line){
-        GradientDrawable border = new GradientDrawable();
-        border.setColor(bg);
-        border.setStroke(1,line);
-        return border;
+    private Boolean isWhiteSpace(int r,int c){
+        return !((r % 2 == 0) ^ (c % 2 == 0));
     }
 
     //configures buttons for a square layout
@@ -89,7 +85,11 @@ public class MainActivity extends AppCompatActivity {
                 //spaces[row][col].setOnClickListener(bh);
                 spaces[row][col].setId(View.generateViewId());
                 spaces[row][col].setBackground(getResources().getDrawable(holo_blue_light,null));
-                spaces[row][col].setBackground(getResources().getDrawable(R.drawable.white_space, null));
+                if(isWhiteSpace(row,col)) {
+                    spaces[row][col].setBackground(getResources().getDrawable(android.R.color.white, null));
+                } else {
+                    spaces[row][col].setBackground(getResources().getDrawable(android.R.color.black, null));
+                }
                 //spaces[row][col].setBackgroundTintList(getResources().getColorStateList(android.R.color.holo_blue_light));
                 spaces[row][col].setId(Integer.parseInt(id));
                 grid.addView(spaces[row][col],w,w);
