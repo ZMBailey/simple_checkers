@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.graphics.Point;
+import android.util.DisplayMetrics;
 //import android.support.v7.app.AppCompatActivity;
 //import android.app.AlertDialog;
 //import android.view.Gravity;
@@ -35,9 +36,10 @@ public class MainActivity extends AppCompatActivity {
 
     protected void makeBoard(){
 
-        Point p = new Point();
-        getWindowManager().getDefaultDisplay().getSize(p);
-        int w = 1;
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        float padding = 40 * getResources().getDisplayMetrics().density;
+        float w = 1;
         Configuration config = getResources( ).getConfiguration( );
 
         try {
@@ -48,19 +50,18 @@ public class MainActivity extends AppCompatActivity {
             //BackHandler gb = new BackHandler();
             //Button back = (Button) findViewById(R.id.back);
             //back.setOnClickListener(gb);
-
             GridLayout grid = (GridLayout) findViewById(R.id.board);
             if( config.orientation == Configuration.ORIENTATION_LANDSCAPE ) {
-                w = (p.y / side)/2;
+                w = (dm.widthPixels - padding)/ side;
             }else if( config.orientation == Configuration.ORIENTATION_PORTRAIT ) {
-                w = p.x / side;
+                w = (dm.widthPixels - padding)/ side;
             }
 
             grid.setColumnCount(side);
             grid.setRowCount(side);
 
 //            if(Game.getType()<7){
-            setButtons_Square(grid,w);
+            setButtons_Square(grid,(int)w);
 //            }
 //            else {
 //                setButtons_Dmnd(bh, w);
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private Boolean isWhiteSpace(int r,int c){
-        return !((r % 2 == 0) ^ (c % 2 == 0));
+        return (r % 2 == 0)==(c % 2 == 0);
     }
 
     //configures buttons for a square layout
