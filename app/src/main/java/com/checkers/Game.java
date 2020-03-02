@@ -26,10 +26,14 @@ public class Game {
     }
 
     public void move(int r_start, int c_start, int r_end, int c_end){
-
+        String temp = pieces[r_end][c_end];
+        pieces[r_end][c_end] = pieces[r_start][c_start];
+        pieces[r_start][c_start] = "Empty";
     }
 
-    public void takePiece(int r, int c){
-
+    public void takePiece(int r_start, int c_start, int r_end, int c_end){
+        String temp = pieces[r_end][c_end];
+        pieces[r_end][c_end] = pieces[r_start][c_start];
+        pieces[r_start][c_start] = "Empty";
     }
 }
