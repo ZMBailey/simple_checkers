@@ -22,6 +22,7 @@ import static android.R.color.holo_blue_light;
 public class MainActivity extends AppCompatActivity {
 
     public View spaces[][];
+    public String pieces[][];
     public int side = 8;
 
     @Override
@@ -87,9 +88,12 @@ public class MainActivity extends AppCompatActivity {
                 spaces[row][col].setId(View.generateViewId());
                 spaces[row][col].setBackground(getResources().getDrawable(holo_blue_light,null));
                 if(isWhiteSpace(row,col)) {
+                    //place white space
                     spaces[row][col].setBackground(getResources().getDrawable(android.R.color.white, null));
                 } else {
+                    //place black space
                     spaces[row][col].setBackground(getResources().getDrawable(android.R.color.black, null));
+                    //check if space is occupied
                 }
                 //spaces[row][col].setBackgroundTintList(getResources().getColorStateList(android.R.color.holo_blue_light));
                 spaces[row][col].setId(Integer.parseInt(id));
