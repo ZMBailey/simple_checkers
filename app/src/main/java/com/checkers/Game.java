@@ -36,4 +36,9 @@ public class Game {
         pieces[r_end][c_end] = pieces[r_start][c_start];
         pieces[r_start][c_start] = "Empty";
     }
+
+    private Boolean isValidMove(int r_start, int c_start, int r_end, int c_end){
+
+        return true;
+    }
 }
