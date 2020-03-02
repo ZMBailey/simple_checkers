@@ -22,7 +22,6 @@ import static android.R.color.holo_blue_light;
 public class MainActivity extends AppCompatActivity {
 
     public View spaces[][];
-    public String pieces[][];
     public int side = 8;
 
     @Override
