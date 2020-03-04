@@ -48,8 +48,17 @@ public class Game {
         pieces[m.r1][m.c1] = null;
     }
 
-    private Boolean isValidMove(int r_start, int c_start, int r_end, int c_end){
-
+    private Boolean isValidMove(Move m){
+        if(m.isJump){
+            int r3 = Math.max(m.r2, m.r1) - 1;
+            int c3 = Math.max(m.c2, m.c1) - 1;
+            if(pieces[r3][c3] == null || (pieces[r3][c3].color.equals(pieces[m.r1][m.c1].color))) {
+                return false;
+            }
+        }
+        if(pieces[m.r2][m.c2] != null){
+            return false;
+        }
         return true;
     }
 
