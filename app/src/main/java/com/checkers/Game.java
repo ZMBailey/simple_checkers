@@ -49,6 +49,12 @@ public class Game {
     }
 
     private Boolean isValidMove(Move m){
+        Piece p = pieces[m.r1][m.c1];
+        if(!p.rank.equals("King")){
+            if(p.color.equals("Red") && m.r1>m.r2){
+                return false;
+            }
+        }
         if(m.isJump){
             int r3 = Math.max(m.r2, m.r1) - 1;
             int c3 = Math.max(m.c2, m.c1) - 1;
