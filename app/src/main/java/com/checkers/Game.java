@@ -1,6 +1,11 @@
 package com.checkers;
 import java.util.ArrayList;
 
+/*
+    Game Class for Checkers application. Contains primary game logic
+    for a checkers game, implementing standard Checkers rules.
+ */
+
 public class Game {
     public Piece [][] pieces = new Piece[8][8];
     public ArrayList<Piece> red = new ArrayList<>();
