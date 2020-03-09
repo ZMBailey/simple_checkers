@@ -50,11 +50,22 @@ public class Game {
 
     private Boolean isValidMove(Move m){
         Piece p = pieces[m.r1][m.c1];
+
+        //Check valid target space
+        if(!((m.r2 == m.r1+1 || m.r2 == m.r1-1) && (m.c2 == m.c1+1 || m.c2 == m.c1-1))){
+            return false;
+        }
+
+        //Check direction
         if(!p.rank.equals("King")){
-            if(p.color.equals("Red") && m.r1>m.r2){
+            if(p.color.equals("Red") && m.r1>=m.r2){
+                return false;
+            }else if(p.color.equals("Blue") && m.r1<=m.r2){
                 return false;
             }
         }
+
+        //Check Jump
         if(m.isJump){
             int r3 = Math.max(m.r2, m.r1) - 1;
             int c3 = Math.max(m.c2, m.c1) - 1;
@@ -62,6 +73,8 @@ public class Game {
                 return false;
             }
         }
+
+        //Check empty target space
         if(pieces[m.r2][m.c2] != null){
             return false;
         }
