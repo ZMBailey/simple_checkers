@@ -18,7 +18,7 @@ public class Game {
             //columns
             for(int c=0;c<9;c++){
                 //check for black space
-                if(!isWhiteSpace(r,c)){
+                if(isBlackSpace(r,c)){
                     if(r<3){
                         //red side of board
                         Piece pawn = new Piece("Red","Pawn",r,c,false);
@@ -39,8 +39,8 @@ public class Game {
         }
     }
 
-    public Boolean isWhiteSpace(int r,int c){
-        return (r % 2 == 0)==(c % 2 == 0);
+    public Boolean isBlackSpace(int r,int c){
+        return (r % 2 == 0)^(c % 2 == 0);
     }
 
     public void move(Move m){
