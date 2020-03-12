@@ -12,14 +12,20 @@ public class Game {
     public ArrayList<Piece> blue = new ArrayList<>();
 
     public void initializeGame(){
+        //set up board
+        //rows
         for(int r=0;r<9;r++){
+            //columns
             for(int c=0;c<9;c++){
+                //check for black space
                 if(!isWhiteSpace(r,c)){
                     if(r<3){
+                        //red side of board
                         Piece pawn = new Piece("Red","Pawn",r,c,false);
                         red.add(pawn);
                         pieces[r][c] = pawn;
                     }else if(r>4) {
+                        //blue side of board
                         Piece pawn = new Piece("Blue","Pawn",r,c,false);
                         blue.add(pawn);
                         pieces[r][c] = pawn;
@@ -53,24 +59,29 @@ public class Game {
         pieces[m.r1][m.c1] = null;
     }
 
-    private Boolean isValidMove(Move m){
+    private Boolean isValidDistance(Move m){
+        return ((m.r2 == m.r1+1 || m.r2 == m.r1-1) && (m.c2 == m.c1+1 || m.c2 == m.c1-1));
+    }
+
+    private Boolean isValidDirection(Move m){
         Piece p = pieces[m.r1][m.c1];
 
-        //Check valid target space
-        if(!((m.r2 == m.r1+1 || m.r2 == m.r1-1) && (m.c2 == m.c1+1 || m.c2 == m.c1-1))){
-            return false;
-        }
-
-        //Check direction
         if(!p.rank.equals("King")){
             if(p.color.equals("Red") && m.r1>=m.r2){
                 return false;
-            }else if(p.color.equals("Blue") && m.r1<=m.r2){
-                return false;
+            }else{
+                return !(p.color.equals("Blue") && m.r1<=m.r2);
             }
         }
 
-        //Check Jump
+        return true;
+    }
+
+    private Boolean isValidTarget(Move m){
+        return pieces[m.r2][m.c2] == null;
+    }
+
+    private Boolean isJumpable(Move m){
         if(m.isJump){
             int r3 = Math.max(m.r2, m.r1) - 1;
             int c3 = Math.max(m.c2, m.c1) - 1;
@@ -79,11 +90,19 @@ public class Game {
             }
         }
 
-        //Check empty target space
-        if(pieces[m.r2][m.c2] != null){
-            return false;
-        }
         return true;
+    }
+
+    public Boolean isValidMove(Move m){
+        //Check valid target space
+        //Check empty target space
+        //Check direction
+        return (isValidDistance(m) && isValidTarget(m) && isValidDirection(m));
+
+    }
+
+    public Boolean isValidJump(Move m){
+        return (isValidMove(m) && isJumpable(m));
     }
 
     private Piece makeKing(Piece p){
