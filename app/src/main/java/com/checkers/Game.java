@@ -14,9 +14,9 @@ public class Game {
     public void initializeGame(){
         //set up board
         //rows
-        for(int r=0;r<9;r++){
+        for(int r=0;r<8;r++){
             //columns
-            for(int c=0;c<9;c++){
+            for(int c=0;c<8;c++){
                 //check for black space
                 if(isBlackSpace(r,c)){
                     if(r<3){

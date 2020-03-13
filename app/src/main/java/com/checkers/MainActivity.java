@@ -2,7 +2,10 @@ package com.checkers;
 
 import androidx.appcompat.app.AppCompatActivity;
 //import android.content.DialogInterface;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.graphics.Point;
 import android.util.DisplayMetrics;
@@ -21,16 +24,17 @@ import static android.R.color.holo_blue_light;
 
 public class MainActivity extends AppCompatActivity {
 
-    public View spaces[][];
+    public ImageButton spaces[][];
     public int side = 8;
+    private Game mGame = new Game();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        spaces = new View[side][side];
+        spaces = new ImageButton[side][side];
 
         setContentView(R.layout.activity_main);
-
+        mGame.initializeGame();
         makeBoard();
     }
 
@@ -72,8 +76,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean isWhiteSpace(int r,int c){
-        return (r % 2 == 0)==(c % 2 == 0);
+    private int findColor(int r, int c){
+        Piece p = mGame.pieces[r][c];
+        if(p != null){
+           if(p.color.equals("Blue")){
+               return R.drawable.blue_pawn;
+           }else{
+               return R.drawable.red_pawn;
+           }
+        }
+
+        return -1;
     }
 
     //configures buttons for a square layout
@@ -82,17 +95,21 @@ public class MainActivity extends AppCompatActivity {
         for(int row=0; row< side; row++){
             for(int col=0; col<side; col++) {
                 String id = Integer.toString(row)+Integer.toString(col);
-                spaces[row][col] = new View(this);
+                spaces[row][col] = new ImageButton(this);
                 //spaces[row][col].setOnClickListener(bh);
                 spaces[row][col].setId(View.generateViewId());
-                spaces[row][col].setBackground(getResources().getDrawable(holo_blue_light,null));
-                if(isWhiteSpace(row,col)) {
-                    //place white space
+                if(findColor(row,col) != -1) {
+                    spaces[row][col].setImageDrawable(getResources().getDrawable(findColor(row,col), null));
+                    spaces[row][col].setAdjustViewBounds(true);
+                    spaces[row][col].setScaleType(ImageView.ScaleType.FIT_CENTER);
+                }
+                if (!mGame.isBlackSpace(row, col)) {
+                        //place white space
                     spaces[row][col].setBackground(getResources().getDrawable(android.R.color.white, null));
                 } else {
-                    //place black space
+                        //place black space
                     spaces[row][col].setBackground(getResources().getDrawable(android.R.color.black, null));
-                    //check if space is occupied
+                        //check if space is occupied
                 }
                 //spaces[row][col].setBackgroundTintList(getResources().getColorStateList(android.R.color.holo_blue_light));
                 spaces[row][col].setId(Integer.parseInt(id));
