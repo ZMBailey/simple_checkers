@@ -117,4 +117,18 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    public void updatePieces(){
+        for(int row=0; row< side; row++) {
+            for (int col = 0; col < side; col++) {
+                if(findColor(row,col) != -1) {
+                    spaces[row][col].setImageDrawable(getResources().getDrawable(findColor(row,col), null));
+                    spaces[row][col].setAdjustViewBounds(true);
+                    spaces[row][col].setScaleType(ImageView.ScaleType.FIT_CENTER);
+                }else {
+                    spaces[row][col].setImageDrawable(null);
+                }
+            }
+        }
+    }
 }
