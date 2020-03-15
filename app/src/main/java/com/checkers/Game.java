@@ -60,7 +60,11 @@ public class Game {
     }
 
     private Boolean isValidDistance(Move m){
-        return ((m.r2 == m.r1+1 || m.r2 == m.r1-1) && (m.c2 == m.c1+1 || m.c2 == m.c1-1));
+        int d = 1;
+        if(m.isJump){
+            d = 2;
+        }
+        return ((m.r2 == m.r1+d || m.r2 == m.r1-d) && (m.c2 == m.c1+d || m.c2 == m.c1-d));
     }
 
     private Boolean isValidDirection(Move m){
@@ -108,5 +112,39 @@ public class Game {
     private Piece makeKing(Piece p){
         p.rank = "King";
         return p;
+    }
+
+    public ArrayList<Move> checkForMoves(int r, int c){
+        ArrayList<Move> moves = new ArrayList<>();
+
+        Move up_left = new Move(r,c,r-1,c-1,false);
+        Move up_right = new Move(r,c,r-1,c+1,false);
+        Move down_left = new Move(r,c,r+1,c-1,false);
+        Move down_right = new Move(r,c,r+1,c+1,false);
+
+        for(Move m : moves){
+            if(!isValidMove(m)){
+                moves.remove(m);
+            }
+        }
+
+        return moves;
+    }
+
+    public ArrayList<Move> checkForJumps(int r, int c){
+        ArrayList<Move> moves = new ArrayList<>();
+
+        Move up_left = new Move(r,c,r-2,c-2,true);
+        Move up_right = new Move(r,c,r-2,c+2,true);
+        Move down_left = new Move(r,c,r+2,c-2,true);
+        Move down_right = new Move(r,c,r+2,c+2,true);
+
+        for(Move m : moves){
+            if(!isValidJump(m)){
+                moves.remove(m);
+            }
+        }
+
+        return moves;
     }
 }

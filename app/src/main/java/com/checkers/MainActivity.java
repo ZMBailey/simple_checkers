@@ -2,6 +2,7 @@ package com.checkers;
 
 import androidx.appcompat.app.AppCompatActivity;
 //import android.content.DialogInterface;
+import android.os.Handler;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.content.res.Configuration;
@@ -17,14 +18,14 @@ import android.view.View;
 import androidx.gridlayout.widget.GridLayout;
 //import android.widget.RelativeLayout;
 
-//import java.util.Arrays;
+import java.util.ArrayList;
 //import java.util.Locale;
 
 import static android.R.color.holo_blue_light;
 
 public class MainActivity extends AppCompatActivity {
 
-    public ImageButton spaces[][];
+    public ImageButton[][] spaces;
     public int side = 8;
     private Game mGame = new Game();
 
@@ -129,6 +130,58 @@ public class MainActivity extends AppCompatActivity {
                     spaces[row][col].setImageDrawable(null);
                 }
             }
+        }
+    }
+
+    private class SelectPieceHandler implements View.OnClickListener {
+        public void onClick(View v) {
+            int id = v.getId();
+            int row;
+            int col;
+            if(id<10){
+                row = 0;
+                col = id;
+            }else {
+                row = Character.getNumericValue(Integer.toString(id).charAt(0));
+                col = Character.getNumericValue(Integer.toString(id).charAt(1));
+            }
+
+            ArrayList<Move> moves = mGame.checkForJumps(row,col);
+            if(moves.size() == 0){
+                moves = mGame.checkForMoves(row,col);
+            }
+
+            for(Move m: moves){
+                if(m.isJump){
+                    spaces[m.r2][m.c2].setOnClickListener(new JumpHighlightHandler(m));
+                } else {
+                    spaces[m.r2][m.c2].setOnClickListener(new MoveHighlightHandler(m));
+                }
+            }
+        }
+    }
+
+    private class MoveHighlightHandler implements View.OnClickListener {
+        private Move m;
+
+        public MoveHighlightHandler(Move m){
+            this.m = m;
+        }
+
+        public void onClick(View v) {
+
+        }
+    }
+
+    private class JumpHighlightHandler implements View.OnClickListener {
+        private Move m;
+
+        public JumpHighlightHandler(Move m){
+            this.m = m;
+        }
+
+        public void onClick(View v) {
+
         }
     }
 }
