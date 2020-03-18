@@ -167,11 +167,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             for(Move m: moves){
-//                if(m.isJump){
-////                    spaces[m.r2][m.c2].setOnClickListener(new JumpHighlightHandler(m));
-////                } else {
-////                    spaces[m.r2][m.c2].setOnClickListener(new MoveHighlightHandler(m));
-////                }
+                if(m.isJump){
+                    spaces[m.r2][m.c2].setOnClickListener(new JumpHighlightHandler(m));
+                } else {
+                    spaces[m.r2][m.c2].setOnClickListener(new MoveHighlightHandler(m));
+                }
+                Log.i("Highlighting Move: ", m.r2 + ", " + m.c2);
                 spaces[m.r2][m.c2].setBackground(getResources().getDrawable(android.R.color.holo_green_light, null));
             }
 

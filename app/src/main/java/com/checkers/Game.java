@@ -83,6 +83,10 @@ public class Game {
     }
 
     private Boolean isValidTarget(Move m){
+        if(m.r2 < 0 || m.c2 < 0 || m.r2 > 7 || m.c2 > 7){
+            return false;
+        }
+
         return pieces[m.r2][m.c2] == null;
     }
 
@@ -126,12 +130,12 @@ public class Game {
 
         for(Move m : moves){
             if(isValidMove(m)){
-                valid_moves.remove(m);
+                valid_moves.add(m);
                 Log.i("move", m.r2 + ", " + m.c2);
             }
         }
 
-        return moves;
+        return valid_moves;
     }
 
     public ArrayList<Move> checkForJumps(int r, int c){
@@ -146,10 +150,9 @@ public class Game {
         for(Move m : moves){
             if(isValidJump(m)){
                 valid_moves.add(m);
-                Log.i("jump", m.r2 + ", " + m.c2);
             }
         }
 
-        return moves;
+        return valid_moves;
     }
 }
