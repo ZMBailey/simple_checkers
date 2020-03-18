@@ -3,6 +3,7 @@ package com.checkers;
 import androidx.appcompat.app.AppCompatActivity;
 //import android.content.DialogInterface;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.content.res.Configuration;
@@ -37,6 +38,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mGame.initializeGame();
         makeBoard();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updatePieces();
     }
 
     protected void makeBoard(){
@@ -92,14 +99,15 @@ public class MainActivity extends AppCompatActivity {
 
     //configures buttons for a square layout
     private void setButtons_Square(GridLayout grid, int w){
+        SelectPieceHandler sh = new SelectPieceHandler();
 
         for(int row=0; row< side; row++){
             for(int col=0; col<side; col++) {
                 String id = Integer.toString(row)+Integer.toString(col);
                 spaces[row][col] = new ImageButton(this);
-                //spaces[row][col].setOnClickListener(bh);
                 spaces[row][col].setId(View.generateViewId());
                 if(findColor(row,col) != -1) {
+                    spaces[row][col].setOnClickListener(sh);
                     spaces[row][col].setImageDrawable(getResources().getDrawable(findColor(row,col), null));
                     spaces[row][col].setAdjustViewBounds(true);
                     spaces[row][col].setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -146,16 +154,42 @@ public class MainActivity extends AppCompatActivity {
                 col = Character.getNumericValue(Integer.toString(id).charAt(1));
             }
 
+            for(int r=0; r< side; r++){
+                for(int c=0; c<side; c++) {
+                    spaces[r][c].setOnClickListener(null);
+                }
+            }
+
             ArrayList<Move> moves = mGame.checkForJumps(row,col);
+            Log.i("Button Clicked: ", "Checked for Jumps");
             if(moves.size() == 0){
                 moves = mGame.checkForMoves(row,col);
             }
 
             for(Move m: moves){
-                if(m.isJump){
-                    spaces[m.r2][m.c2].setOnClickListener(new JumpHighlightHandler(m));
-                } else {
-                    spaces[m.r2][m.c2].setOnClickListener(new MoveHighlightHandler(m));
+//                if(m.isJump){
+////                    spaces[m.r2][m.c2].setOnClickListener(new JumpHighlightHandler(m));
+////                } else {
+////                    spaces[m.r2][m.c2].setOnClickListener(new MoveHighlightHandler(m));
+////                }
+                spaces[m.r2][m.c2].setBackground(getResources().getDrawable(android.R.color.holo_green_light, null));
+            }
+
+            v.setOnClickListener(new UnSelectHandler());
+        }
+    }
+
+    private class UnSelectHandler implements View.OnClickListener {
+
+        public void onClick(View v){
+            SelectPieceHandler sh = new SelectPieceHandler();
+
+            for(int r=0; r< side; r++){
+                for(int c=0; c<side; c++) {
+                    if(findColor(r,c) != -1) {
+                        spaces[r][c].setOnClickListener(sh);
+                        spaces[r][c].setBackground(getResources().getDrawable(android.R.color.black, null));
+                    }
                 }
             }
         }
@@ -169,19 +203,22 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void onClick(View v) {
-
+            mGame.move(m);
+            updatePieces();
         }
     }
 
     private class JumpHighlightHandler implements View.OnClickListener {
         private Move m;
 
-        public JumpHighlightHandler(Move m){
+        private JumpHighlightHandler(Move m){
             this.m = m;
         }
 
         public void onClick(View v) {
-
+            mGame.jump(m);
+            updatePieces();
         }
     }
+
 }

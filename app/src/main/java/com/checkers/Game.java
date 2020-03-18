@@ -1,5 +1,6 @@
 package com.checkers;
 import java.util.ArrayList;
+import android.util.Log;
 
 /*
     Game Class for Checkers application. Contains primary game logic
@@ -116,15 +117,17 @@ public class Game {
 
     public ArrayList<Move> checkForMoves(int r, int c){
         ArrayList<Move> moves = new ArrayList<>();
+        ArrayList<Move> valid_moves = new ArrayList<>();
 
-        Move up_left = new Move(r,c,r-1,c-1,false);
-        Move up_right = new Move(r,c,r-1,c+1,false);
-        Move down_left = new Move(r,c,r+1,c-1,false);
-        Move down_right = new Move(r,c,r+1,c+1,false);
+        moves.add(new Move(r,c,r-1,c-1,false));
+        moves.add(new Move(r,c,r-1,c+1,false));
+        moves.add(new Move(r,c,r+1,c-1,false));
+        moves.add(new Move(r,c,r+1,c+1,false));
 
         for(Move m : moves){
-            if(!isValidMove(m)){
-                moves.remove(m);
+            if(isValidMove(m)){
+                valid_moves.remove(m);
+                Log.i("move", m.r2 + ", " + m.c2);
             }
         }
 
@@ -133,15 +136,17 @@ public class Game {
 
     public ArrayList<Move> checkForJumps(int r, int c){
         ArrayList<Move> moves = new ArrayList<>();
+        ArrayList<Move> valid_moves = new ArrayList<>();
 
-        Move up_left = new Move(r,c,r-2,c-2,true);
-        Move up_right = new Move(r,c,r-2,c+2,true);
-        Move down_left = new Move(r,c,r+2,c-2,true);
-        Move down_right = new Move(r,c,r+2,c+2,true);
+        moves.add(new Move(r,c,r-2,c-2,true));
+        moves.add(new Move(r,c,r-2,c+2,true));
+        moves.add(new Move(r,c,r+2,c-2,true));
+        moves.add(new Move(r,c,r+2,c+2,true));
 
         for(Move m : moves){
-            if(!isValidJump(m)){
-                moves.remove(m);
+            if(isValidJump(m)){
+                valid_moves.add(m);
+                Log.i("jump", m.r2 + ", " + m.c2);
             }
         }
 
