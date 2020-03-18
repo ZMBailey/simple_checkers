@@ -141,7 +141,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void resetHandlers(){
+        SelectPieceHandler sh = new SelectPieceHandler();
+
+        for(int r=0; r< side; r++){
+            for(int c=0; c<side; c++) {
+                if(findColor(r,c) != -1) {
+                    spaces[r][c].setOnClickListener(sh);
+                }
+                if (mGame.isBlackSpace(r, c)) {
+                    spaces[r][c].setBackground(getResources().getDrawable(android.R.color.black, null));
+                }
+            }
+        }
+    }
+
     private class SelectPieceHandler implements View.OnClickListener {
+        private Boolean selected = false;
+        private Boolean highlighted = false;
+
         public void onClick(View v) {
             int id = v.getId();
             int row;
@@ -154,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
                 col = Character.getNumericValue(Integer.toString(id).charAt(1));
             }
 
+            Log.i("origin: ", row + ", " + col);
             for(int r=0; r< side; r++){
                 for(int c=0; c<side; c++) {
                     spaces[r][c].setOnClickListener(null);
@@ -161,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             ArrayList<Move> moves = mGame.checkForJumps(row,col);
-            Log.i("Button Clicked: ", "Checked for Jumps");
+
             if(moves.size() == 0){
                 moves = mGame.checkForMoves(row,col);
             }
@@ -183,16 +202,7 @@ public class MainActivity extends AppCompatActivity {
     private class UnSelectHandler implements View.OnClickListener {
 
         public void onClick(View v){
-            SelectPieceHandler sh = new SelectPieceHandler();
-
-            for(int r=0; r< side; r++){
-                for(int c=0; c<side; c++) {
-                    if(findColor(r,c) != -1) {
-                        spaces[r][c].setOnClickListener(sh);
-                        spaces[r][c].setBackground(getResources().getDrawable(android.R.color.black, null));
-                    }
-                }
-            }
+            resetHandlers();
         }
     }
 
@@ -206,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             mGame.move(m);
             updatePieces();
+            resetHandlers();
         }
     }
 
@@ -219,6 +230,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             mGame.jump(m);
             updatePieces();
+            resetHandlers();
         }
     }
 
