@@ -195,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
                 spaces[m.r2][m.c2].setBackground(getResources().getDrawable(android.R.color.holo_green_light, null));
             }
 
+            v.setBackground(getResources().getDrawable(holo_blue_light, null));
             v.setOnClickListener(new UnSelectHandler());
         }
     }
@@ -209,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
     private class MoveHighlightHandler implements View.OnClickListener {
         private Move m;
 
-        public MoveHighlightHandler(Move m){
+        private MoveHighlightHandler(Move m){
             this.m = m;
         }
 
