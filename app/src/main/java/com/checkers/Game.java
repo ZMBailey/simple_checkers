@@ -48,16 +48,15 @@ public class Game {
         Piece temp = pieces[m.r2][m.c2];
         pieces[m.r2][m.c2] = pieces[m.r1][m.c1];
         pieces[m.r1][m.c1] = temp;
+        pieces[m.r2][m.c2].setLocation(m.r2,m.c2);
     }
 
     public void jump(Move m){
-        Piece temp = pieces[m.r2][m.c2];
-        pieces[m.r2][m.c2] = pieces[m.r1][m.c1];
+        move(m);
         int r3 = Math.max(m.r2, m.r1) - 1;
         int c3 = Math.max(m.c2, m.c1) - 1;
-        pieces[r3][c3].isTaken = true;
+        pieces[r3][c3].setTaken();
         pieces[r3][c3] = null;
-        pieces[m.r1][m.c1] = null;
     }
 
     private Boolean isValidDistance(Move m){

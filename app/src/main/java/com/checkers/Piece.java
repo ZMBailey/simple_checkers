@@ -14,4 +14,15 @@ public class Piece {
             this.col = c;
             this.isTaken = taken;
         }
+
+    public void setLocation(int r, int c){
+        row = r;
+        col = c;
+    }
+
+    public void setTaken(){
+        isTaken = true;
+        row = -1;
+        col = -1;
+    }
 }
