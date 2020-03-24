@@ -107,7 +107,9 @@ public class MainActivity extends AppCompatActivity {
                 spaces[row][col] = new ImageButton(this);
                 spaces[row][col].setId(View.generateViewId());
                 if(findColor(row,col) != -1) {
-                    spaces[row][col].setOnClickListener(sh);
+                    if(mGame.pieces[row][col].color.equals(mGame.getTurn())){
+                        spaces[row][col].setOnClickListener(sh);
+                    }
                     spaces[row][col].setImageDrawable(getResources().getDrawable(findColor(row,col), null));
                     spaces[row][col].setAdjustViewBounds(true);
                     spaces[row][col].setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -147,7 +149,9 @@ public class MainActivity extends AppCompatActivity {
         for(int r=0; r< side; r++){
             for(int c=0; c<side; c++) {
                 if(findColor(r,c) != -1) {
-                    spaces[r][c].setOnClickListener(sh);
+                    if(mGame.pieces[r][c].color.equals(mGame.getTurn())){
+                        spaces[r][c].setOnClickListener(sh);
+                    }
                 }
                 if (mGame.isBlackSpace(r, c)) {
                     spaces[r][c].setBackground(getResources().getDrawable(android.R.color.black, null));

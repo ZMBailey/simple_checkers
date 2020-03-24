@@ -9,8 +9,9 @@ import android.util.Log;
 
 public class Game {
     public Piece [][] pieces = new Piece[8][8];
-    public ArrayList<Piece> red = new ArrayList<>();
-    public ArrayList<Piece> blue = new ArrayList<>();
+    private ArrayList<Piece> red = new ArrayList<>();
+    private ArrayList<Piece> blue = new ArrayList<>();
+    private String turn = "Red";
 
     public void initializeGame(){
         //set up board
@@ -40,8 +41,22 @@ public class Game {
         }
     }
 
+    public String getTurn(){
+        return turn;
+    }
+
     public Boolean isBlackSpace(int r,int c){
         return (r % 2 == 0)^(c % 2 == 0);
+    }
+
+    public String newTurn(){
+        if(turn.equals("Red")){
+            turn = "Blue";
+        } else {
+            turn = "Red";
+        }
+
+        return turn;
     }
 
     public void move(Move m){
@@ -49,6 +64,7 @@ public class Game {
         pieces[m.r2][m.c2] = pieces[m.r1][m.c1];
         pieces[m.r1][m.c1] = temp;
         pieces[m.r2][m.c2].setLocation(m.r2,m.c2);
+        newTurn();
     }
 
     public void jump(Move m){
@@ -57,6 +73,10 @@ public class Game {
         int c3 = Math.max(m.c2, m.c1) - 1;
         pieces[r3][c3].setTaken();
         pieces[r3][c3] = null;
+    }
+
+    private Boolean isTurn(Move m){
+        return pieces[m.r1][m.c1].color.equals(turn);
     }
 
     private Boolean isValidDistance(Move m){
@@ -105,7 +125,7 @@ public class Game {
         //Check valid target space
         //Check empty target space
         //Check direction
-        return (isValidDistance(m) && isValidTarget(m) && isValidDirection(m));
+        return (isValidDistance(m) && isValidTarget(m) && isTurn(m) && isValidDirection(m));
 
     }
 
