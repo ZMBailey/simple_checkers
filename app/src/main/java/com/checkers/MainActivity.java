@@ -160,47 +160,55 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private Boolean selectSpace(View v, Boolean isMove){
+        int id = v.getId();
+        int row;
+        int col;
+        if(id<10){
+            row = 0;
+            col = id;
+        }else {
+            row = Character.getNumericValue(Integer.toString(id).charAt(0));
+            col = Character.getNumericValue(Integer.toString(id).charAt(1));
+        }
+
+        Log.i("origin: ", row + ", " + col);
+        for(int r=0; r< side; r++){
+            for(int c=0; c<side; c++) {
+                spaces[r][c].setOnClickListener(null);
+            }
+        }
+
+        ArrayList<Move> moves = mGame.checkForJumps(row,col);
+
+        if(moves.size() == 0 && isMove){
+            moves = mGame.checkForMoves(row,col);
+        }
+
+        for(Move m: moves){
+            if(m.isJump){
+                spaces[m.r2][m.c2].setOnClickListener(new JumpHighlightHandler(m));
+            } else {
+                spaces[m.r2][m.c2].setOnClickListener(new MoveHighlightHandler(m));
+            }
+            Log.i("Highlighting Move: ", m.r2 + ", " + m.c2);
+            spaces[m.r2][m.c2].setBackground(getResources().getDrawable(android.R.color.holo_green_light, null));
+        }
+
+        if(moves.size() > 0 && isMove) {
+            v.setBackground(getResources().getDrawable(holo_blue_light, null));
+            v.setOnClickListener(new UnSelectHandler());
+        }
+
+        return moves.size() == 0;
+    }
+
     private class SelectPieceHandler implements View.OnClickListener {
         private Boolean selected = false;
         private Boolean highlighted = false;
 
         public void onClick(View v) {
-            int id = v.getId();
-            int row;
-            int col;
-            if(id<10){
-                row = 0;
-                col = id;
-            }else {
-                row = Character.getNumericValue(Integer.toString(id).charAt(0));
-                col = Character.getNumericValue(Integer.toString(id).charAt(1));
-            }
-
-            Log.i("origin: ", row + ", " + col);
-            for(int r=0; r< side; r++){
-                for(int c=0; c<side; c++) {
-                    spaces[r][c].setOnClickListener(null);
-                }
-            }
-
-            ArrayList<Move> moves = mGame.checkForJumps(row,col);
-
-            if(moves.size() == 0){
-                moves = mGame.checkForMoves(row,col);
-            }
-
-            for(Move m: moves){
-                if(m.isJump){
-                    spaces[m.r2][m.c2].setOnClickListener(new JumpHighlightHandler(m));
-                } else {
-                    spaces[m.r2][m.c2].setOnClickListener(new MoveHighlightHandler(m));
-                }
-                Log.i("Highlighting Move: ", m.r2 + ", " + m.c2);
-                spaces[m.r2][m.c2].setBackground(getResources().getDrawable(android.R.color.holo_green_light, null));
-            }
-
-            v.setBackground(getResources().getDrawable(holo_blue_light, null));
-            v.setOnClickListener(new UnSelectHandler());
+            selectSpace(v,true);
         }
     }
 
@@ -236,6 +244,12 @@ public class MainActivity extends AppCompatActivity {
             mGame.jump(m);
             updatePieces();
             resetHandlers();
+            Boolean turnOver = selectSpace(v, false);
+            if(turnOver) {
+                mGame.newTurn();
+                updatePieces();
+                resetHandlers();
+            }
         }
     }
 
