@@ -177,4 +177,14 @@ public class Game {
 
         return valid_moves;
     }
+
+    public Boolean isKingSpace(Move m){
+        Piece p = pieces[m.r1][m.c1];
+        if((p.color.equals("Blue") && m.r2 == 0) ||
+                (p.color.equals("Red") && m.r2 == 7)){
+            return true;
+        }
+
+        return false;
+    }
 }
