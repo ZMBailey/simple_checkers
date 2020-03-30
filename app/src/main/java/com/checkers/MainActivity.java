@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         updatePieces();
     }
 
+    //Create board with initial setup, creates gridlayout and sets up buttons
     protected void makeBoard(){
 
         DisplayMetrics dm = new DisplayMetrics();
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         return -1;
     }
 
-    //configures buttons for a square layout
+    //configures the spaces and places pieces
     private void setButtons_Square(GridLayout grid, int w){
         SelectPieceHandler sh = new SelectPieceHandler();
 
