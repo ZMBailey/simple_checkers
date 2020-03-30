@@ -13,6 +13,7 @@ public class Game {
     private ArrayList<Piece> blue = new ArrayList<>();
     private String turn = "Red";
 
+    //Create new game, places pieces in starting positions
     public void initializeGame(){
         //set up board
         //rows
@@ -41,10 +42,12 @@ public class Game {
         }
     }
 
+    //returns the current turn
     public String getTurn(){
         return turn;
     }
 
+    //Check if space at input coordinates is a black space.
     public Boolean isBlackSpace(int r,int c){
         return (r % 2 == 0)^(c % 2 == 0);
     }
