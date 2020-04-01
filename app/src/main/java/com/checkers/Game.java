@@ -52,6 +52,7 @@ public class Game {
         return (r % 2 == 0)^(c % 2 == 0);
     }
 
+    //Switch turns between red and blue.
     public String newTurn(){
         if(turn.equals("Red")){
             turn = "Blue";
@@ -62,7 +63,9 @@ public class Game {
         return turn;
     }
 
+    //move a piece between two spaces.
     public void move(Move m){
+        isKingSpace(m);
         Piece temp = pieces[m.r2][m.c2];
         pieces[m.r2][m.c2] = pieces[m.r1][m.c1];
         pieces[m.r1][m.c1] = temp;
@@ -70,6 +73,7 @@ public class Game {
         newTurn();
     }
 
+    //jump a over an enemy piece and capture it.
     public void jump(Move m){
         move(m);
         int r3 = Math.max(m.r2, m.r1) - 1;
@@ -78,10 +82,13 @@ public class Game {
         pieces[r3][c3] = null;
     }
 
+    //return if the selected piece belongs to the current player.
     private Boolean isTurn(Move m){
         return pieces[m.r1][m.c1].color.equals(turn);
     }
 
+    //check if the selected space is one or two spaces diagonally, depending on
+    //whether or not the move is a jump.
     private Boolean isValidDistance(Move m){
         int d = 1;
         if(m.isJump){
@@ -90,6 +97,7 @@ public class Game {
         return ((m.r2 == m.r1+d || m.r2 == m.r1-d) && (m.c2 == m.c1+d || m.c2 == m.c1-d));
     }
 
+    //If the piece is not a king then check if the move is forward, depending on the color.
     private Boolean isValidDirection(Move m){
         Piece p = pieces[m.r1][m.c1];
 
@@ -104,6 +112,7 @@ public class Game {
         return true;
     }
 
+    //returns true if the selected space is empty, also checks to make sure the space is on the board.
     private Boolean isValidTarget(Move m){
         if(m.r2 < 0 || m.c2 < 0 || m.r2 > 7 || m.c2 > 7){
             return false;
@@ -112,6 +121,7 @@ public class Game {
         return pieces[m.r2][m.c2] == null;
     }
 
+    //checks if there is a piece to be captured, and makes sure it is of the opposing color.
     private Boolean isJumpable(Move m){
         if(m.isJump){
             int r3 = Math.max(m.r2, m.r1) - 1;
@@ -124,6 +134,11 @@ public class Game {
         return true;
     }
 
+    /* check if the input move is a valid move:
+    * if the target space is the correct distance away.
+    * if the target space is empty, and on the board.
+    * if the target space is forward(if the piece is not a king)
+    */
     public Boolean isValidMove(Move m){
         //Check valid target space
         //Check empty target space
@@ -132,15 +147,18 @@ public class Game {
 
     }
 
+    //calls isValidMove() and also checks if there is a piece that can be jumped.
     public Boolean isValidJump(Move m){
         return (isValidMove(m) && isJumpable(m));
     }
 
+    //Promotes a piece to a king.
     private Piece makeKing(Piece p){
         p.rank = "King";
         return p;
     }
 
+    //check for valid moves from a single space.
     public ArrayList<Move> checkForMoves(int r, int c){
         ArrayList<Move> moves = new ArrayList<>();
         ArrayList<Move> valid_moves = new ArrayList<>();
@@ -160,6 +178,7 @@ public class Game {
         return valid_moves;
     }
 
+    //check for valid jumps from a certain space.
     public ArrayList<Move> checkForJumps(int r, int c){
         ArrayList<Move> moves = new ArrayList<>();
         ArrayList<Move> valid_moves = new ArrayList<>();
@@ -178,13 +197,13 @@ public class Game {
         return valid_moves;
     }
 
-    public Boolean isKingSpace(Move m){
+    //checks if the end space of a move is at the far edge of the board
+    //(depends on the piece's color) and if so promotes the piece to a king.
+    public void isKingSpace(Move m){
         Piece p = pieces[m.r1][m.c1];
         if((p.color.equals("Blue") && m.r2 == 0) ||
                 (p.color.equals("Red") && m.r2 == 7)){
-            return true;
+            makeKing(p);
         }
-
-        return false;
     }
 }
