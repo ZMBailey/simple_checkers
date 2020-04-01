@@ -89,9 +89,17 @@ public class MainActivity extends AppCompatActivity {
         Piece p = mGame.pieces[r][c];
         if(p != null){
            if(p.color.equals("Blue")){
-               return R.drawable.blue_pawn;
+               if(p.rank.equals("Pawn")) {
+                   return R.drawable.blue_pawn;
+               } else {
+                   return R.drawable.blue_king;
+               }
            }else{
-               return R.drawable.red_pawn;
+               if(p.rank.equals("Pawn")) {
+                   return R.drawable.red_pawn;
+               } else {
+                   return R.drawable.red_king;
+               }
            }
         }
 
@@ -196,8 +204,8 @@ public class MainActivity extends AppCompatActivity {
             spaces[m.r2][m.c2].setBackground(getResources().getDrawable(android.R.color.holo_green_light, null));
         }
 
+        v.setBackground(getResources().getDrawable(holo_blue_light, null));
         if(moves.size() > 0 && isMove) {
-            v.setBackground(getResources().getDrawable(holo_blue_light, null));
             v.setOnClickListener(new UnSelectHandler());
         }
 
@@ -229,6 +237,7 @@ public class MainActivity extends AppCompatActivity {
 
         public void onClick(View v) {
             mGame.move(m);
+            mGame.newTurn();
             updatePieces();
             resetHandlers();
         }

@@ -70,7 +70,6 @@ public class Game {
         pieces[m.r2][m.c2] = pieces[m.r1][m.c1];
         pieces[m.r1][m.c1] = temp;
         pieces[m.r2][m.c2].setLocation(m.r2,m.c2);
-        newTurn();
     }
 
     //jump a over an enemy piece and capture it.
