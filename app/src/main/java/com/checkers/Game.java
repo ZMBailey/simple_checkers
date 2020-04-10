@@ -20,8 +20,8 @@ public class Game {
         //rows
         red = new HashMap<>();
         blue = new HashMap();
-        red.put("Pawn",11);
-        blue.put("Pawn",11);
+        red.put("Pawn",0);
+        blue.put("Pawn",0);
         red.put("King",0);
         blue.put("King",0);
 
@@ -57,21 +57,11 @@ public class Game {
     public void removePiece(String team,String type){
         HashMap<String,Integer> score;
         if(team.equals("Red")){
-            red.put(type,red.get(type) - 1);
+            red.put(type,red.get(type) + 1);
         } else {
-            blue.put(type,blue.get(type) - 1);
+            blue.put(type,blue.get(type) + 1);
         }
 
-    }
-
-    //add one king
-    public void addKing(String team){
-        removePiece(team,"Pawn");
-        if(team.equals("Red")){
-            red.put("King",red.get("King") + 1);
-        } else {
-            blue.put("King",blue.get("King") + 1);
-        }
     }
 
     //Check if space at input coordinates is a black space.
@@ -182,7 +172,6 @@ public class Game {
     //Promotes a piece to a king.
     private Piece makeKing(Piece p){
         p.rank = "King";
-        addKing(p.color);
         return p;
     }
 
