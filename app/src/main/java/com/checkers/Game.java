@@ -53,6 +53,27 @@ public class Game {
         return turn;
     }
 
+    //subtract one piece
+    public void removePiece(String team,String type){
+        HashMap<String,Integer> score;
+        if(team.equals("Red")){
+            red.put(type,red.get(type) - 1);
+        } else {
+            blue.put(type,blue.get(type) - 1);
+        }
+
+    }
+
+    //add one king
+    public void addKing(String team){
+        removePiece(team,"Pawn");
+        if(team.equals("Red")){
+            red.put("King",red.get("King") + 1);
+        } else {
+            blue.put("King",blue.get("King") + 1);
+        }
+    }
+
     //Check if space at input coordinates is a black space.
     public Boolean isBlackSpace(int r,int c){
         return (r % 2 == 0)^(c % 2 == 0);
@@ -83,6 +104,7 @@ public class Game {
         move(m);
         int r3 = Math.max(m.r2, m.r1) - 1;
         int c3 = Math.max(m.c2, m.c1) - 1;
+        removePiece(pieces[r3][c3].color, pieces[r3][c3].rank);
         pieces[r3][c3].setTaken();
         pieces[r3][c3] = null;
     }
@@ -160,6 +182,7 @@ public class Game {
     //Promotes a piece to a king.
     private Piece makeKing(Piece p){
         p.rank = "King";
+        addKing(p.color);
         return p;
     }
 
