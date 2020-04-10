@@ -46,6 +46,12 @@ public class MainActivity extends AppCompatActivity {
         updatePieces();
     }
 
+    /*
+    update piece counters
+    set handlers for reset button(dialog)
+    show turn textbox
+     */
+
     //Create board with initial setup, creates gridlayout and sets up buttons
     protected void makeBoard(){
 
@@ -169,6 +175,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void gameOver(){
+        String winner = mGame.checkForWin();
+        if(!winner.equals("None")){
+            //show winning/game over dialog
+        }
+    }
+
     private Boolean selectSpace(View v, Boolean isMove){
         int id = v.getId();
         int row;
@@ -256,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
             resetHandlers();
             Boolean turnOver = selectSpace(v, false);
             if(turnOver) {
+                gameOver();
                 mGame.newTurn();
                 updatePieces();
                 resetHandlers();
