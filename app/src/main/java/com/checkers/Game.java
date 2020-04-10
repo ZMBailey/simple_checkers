@@ -1,5 +1,6 @@
 package com.checkers;
 import java.util.ArrayList;
+import java.util.HashMap;
 import android.util.Log;
 
 /*
@@ -9,14 +10,21 @@ import android.util.Log;
 
 public class Game {
     public Piece [][] pieces = new Piece[8][8];
-    private ArrayList<Piece> red = new ArrayList<>();
-    private ArrayList<Piece> blue = new ArrayList<>();
     private String turn = "Red";
+    private HashMap<String,Integer> blue;
+    private HashMap<String,Integer> red;
 
     //Create new game, places pieces in starting positions
     public void initializeGame(){
         //set up board
         //rows
+        red = new HashMap<>();
+        blue = new HashMap();
+        red.put("Pawn",11);
+        blue.put("Pawn",11);
+        red.put("King",0);
+        blue.put("King",0);
+
         for(int r=0;r<8;r++){
             //columns
             for(int c=0;c<8;c++){
@@ -25,12 +33,10 @@ public class Game {
                     if(r<3){
                         //red side of board
                         Piece pawn = new Piece("Red","Pawn",r,c,false);
-                        red.add(pawn);
                         pieces[r][c] = pawn;
                     }else if(r>4) {
                         //blue side of board
                         Piece pawn = new Piece("Blue","Pawn",r,c,false);
-                        blue.add(pawn);
                         pieces[r][c] = pawn;
                     }else{
                         pieces[r][c] = null;
