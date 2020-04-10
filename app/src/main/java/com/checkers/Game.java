@@ -234,4 +234,14 @@ public class Game {
             makeKing(p);
         }
     }
+
+    public String checkForWin(){
+        if(blue.get("Pawn") + blue.get("King") == 0){
+            return "Red";
+        } else if(red.get("Pawn") + red.get("King") == 0){
+            return "Blue";
+        } else {
+            return "None";
+        }
+    }
 }
