@@ -2,7 +2,9 @@ package com.checkers;
 
 import androidx.appcompat.app.AppCompatActivity;
 //import android.content.DialogInterface;
+import android.content.DialogInterface;
 import android.os.Handler;
+import android.app.AlertDialog;
 import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -175,6 +177,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //shows a message dialog
+    private void showMsg(String m,String t){
+        AlertDialog dialog = new AlertDialog.Builder(this).create();
+        dialog.setTitle(t);
+        dialog.setMessage(m);
+        RestartHandler rh = new RestartHandler();
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Start New Game", rh);
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", rh);
+        dialog.show();
+    }
+
     private void gameOver(){
         String winner = mGame.checkForWin();
         if(!winner.equals("None")){
@@ -274,6 +287,24 @@ public class MainActivity extends AppCompatActivity {
                 updatePieces();
                 resetHandlers();
             }
+        }
+    }
+
+    private class RestartHandler implements DialogInterface.OnClickListener {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch(which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    //restart
+                    mGame.initializeGame();
+                    updatePieces();
+                    resetHandlers();
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    //close
+                    break;
+            }
+
         }
     }
 

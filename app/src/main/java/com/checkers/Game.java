@@ -18,6 +18,7 @@ public class Game {
     public void initializeGame(){
         //set up board
         //rows
+        turn = "Red";
         red = new HashMap<>();
         blue = new HashMap();
         red.put("Pawn",0);
