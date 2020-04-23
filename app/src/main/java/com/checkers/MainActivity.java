@@ -77,12 +77,6 @@ public class MainActivity extends AppCompatActivity {
             Button newGame = (Button) findViewById(R.id.reset_button);
             newGame.setOnClickListener(nh);
 
-            currentPlayer = (TextView) findViewById(R.id.textPlayer);
-            currentPlayer.setText(R.string.red);
-
-            currentPawn = (ImageView) findViewById(R.id.imagePawn);
-            currentPawn.setImageDrawable(getResources().getDrawable(R.drawable.red_pawn, null));
-
             //BackHandler gb = new BackHandler();
             //Button back = (Button) findViewById(R.id.back);
             //back.setOnClickListener(gb);
@@ -102,10 +96,23 @@ public class MainActivity extends AppCompatActivity {
 //            else {
 //                setButtons_Dmnd(bh, w);
 //            }
+            newGame();
 
         }catch(NullPointerException e){
             //showAlert(e);
         }
+    }
+
+    private void newGame(){
+        currentPlayer = (TextView) findViewById(R.id.textPlayer);
+        currentPlayer.setText(R.string.red);
+
+        currentPawn = (ImageView) findViewById(R.id.imagePawn);
+        currentPawn.setImageDrawable(getResources().getDrawable(R.drawable.red_pawn, null));
+
+        mGame.initializeGame();
+        updatePieces();
+        resetHandlers();
     }
 
     private int findColor(int r, int c){
@@ -138,14 +145,6 @@ public class MainActivity extends AppCompatActivity {
                 String id = Integer.toString(row)+Integer.toString(col);
                 spaces[row][col] = new ImageButton(this);
                 spaces[row][col].setId(View.generateViewId());
-                if(findColor(row,col) != -1) {
-                    if(mGame.pieces[row][col].color.equals(mGame.getTurn())){
-                        spaces[row][col].setOnClickListener(sh);
-                    }
-                    spaces[row][col].setImageDrawable(getResources().getDrawable(findColor(row,col), null));
-                    spaces[row][col].setAdjustViewBounds(true);
-                    spaces[row][col].setScaleType(ImageView.ScaleType.FIT_CENTER);
-                }
                 if (!mGame.isBlackSpace(row, col)) {
                         //place white space
                     spaces[row][col].setBackground(getResources().getDrawable(android.R.color.white, null));
@@ -154,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
                     spaces[row][col].setBackground(getResources().getDrawable(android.R.color.black, null));
                         //check if space is occupied
                 }
-                //spaces[row][col].setBackgroundTintList(getResources().getColorStateList(android.R.color.holo_blue_light));
                 spaces[row][col].setId(Integer.parseInt(id));
                 grid.addView(spaces[row][col],w,w);
             }
@@ -320,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            showWinMsg("Your current game will be lost./n" +
+            showWinMsg("Your current game will be lost." +
                     "Would you like to restart?");
         }
     }
@@ -331,9 +329,7 @@ public class MainActivity extends AppCompatActivity {
             switch(which) {
                 case DialogInterface.BUTTON_POSITIVE:
                     //restart
-                    mGame.initializeGame();
-                    updatePieces();
-                    resetHandlers();
+                    newGame();
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
                     //close

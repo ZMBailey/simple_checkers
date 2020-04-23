@@ -226,9 +226,9 @@ public class Game {
     }
 
     public String checkForWin(){
-        if(blue.get("Pawn") + blue.get("King") == 0){
+        if(blue.get("Pawn") + blue.get("King") == 12){
             return "Red";
-        } else if(red.get("Pawn") + red.get("King") == 0){
+        } else if(red.get("Pawn") + red.get("King") == 12){
             return "Blue";
         } else {
             return "None";
