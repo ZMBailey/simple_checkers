@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Checkers</string>
+    <string name="c_player">Current Player:</string>
+    <string name="red">Red</string>
+    <string name="blue">Blue</string>
+    <string name="new_game">New Game</string>
 </resources>

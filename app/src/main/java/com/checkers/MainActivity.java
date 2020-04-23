@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.app.AlertDialog;
 import android.util.Log;
 import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
@@ -64,7 +65,10 @@ public class MainActivity extends AppCompatActivity {
         Configuration config = getResources( ).getConfiguration( );
 
         try {
-            //ColorButtonHandler bh = new ColorButtonHandler();
+            NewGameHandler nh = new NewGameHandler();
+            Button newGame = (Button) findViewById(R.id.reset_button);
+            newGame.setOnClickListener(nh);
+
             //TextView user = (TextView) findViewById(R.id.player);
             //user.setText(Player.current.getName());
 
@@ -178,9 +182,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //shows a message dialog
-    private void showMsg(String m,String t){
+    private void showWinMsg(String m){
         AlertDialog dialog = new AlertDialog.Builder(this).create();
-        dialog.setTitle(t);
+        dialog.setTitle("Game Over");
         dialog.setMessage(m);
         RestartHandler rh = new RestartHandler();
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Start New Game", rh);
@@ -191,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
     private void gameOver(){
         String winner = mGame.checkForWin();
         if(!winner.equals("None")){
+            showWinMsg(winner + " has won! Play again?");
             //show winning/game over dialog
         }
     }
@@ -261,6 +266,7 @@ public class MainActivity extends AppCompatActivity {
             this.m = m;
         }
 
+        @Override
         public void onClick(View v) {
             mGame.move(m);
             mGame.newTurn();
@@ -276,6 +282,7 @@ public class MainActivity extends AppCompatActivity {
             this.m = m;
         }
 
+        @Override
         public void onClick(View v) {
             mGame.jump(m);
             updatePieces();
@@ -287,6 +294,15 @@ public class MainActivity extends AppCompatActivity {
                 updatePieces();
                 resetHandlers();
             }
+        }
+    }
+
+    private class NewGameHandler implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            showWinMsg("Your current game will be lost./n" +
+                    "Would you like to restart?");
         }
     }
 
