@@ -18,12 +18,12 @@ import android.util.DisplayMetrics;
 //import android.app.AlertDialog;
 //import android.view.Gravity;
 import android.view.View;
-//import android.view.ViewGroup;
+import android.widget.TextView;
 import androidx.gridlayout.widget.GridLayout;
 //import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
-//import java.util.Locale;
+import java.util.HashMap;
 
 import static android.R.color.holo_blue_light;
 
@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
     public ImageButton[][] spaces;
     public int side = 8;
     private Game mGame = new Game();
+    private TextView currentPlayer;
+    private ImageView currentPawn;
+    private HashMap<String,Integer> players = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,11 @@ public class MainActivity extends AppCompatActivity {
         spaces = new ImageButton[side][side];
 
         setContentView(R.layout.activity_main);
+
+        players.put("Red",R.string.red);
+        players.put("Blue",R.string.blue);
+        players.put("RedPawn",R.drawable.red_pawn);
+        players.put("BluePawn",R.drawable.blue_pawn);
         mGame.initializeGame();
         makeBoard();
     }
@@ -69,8 +77,11 @@ public class MainActivity extends AppCompatActivity {
             Button newGame = (Button) findViewById(R.id.reset_button);
             newGame.setOnClickListener(nh);
 
-            //TextView user = (TextView) findViewById(R.id.player);
-            //user.setText(Player.current.getName());
+            currentPlayer = (TextView) findViewById(R.id.textPlayer);
+            currentPlayer.setText(R.string.red);
+
+            currentPawn = (ImageView) findViewById(R.id.imagePawn);
+            currentPawn.setImageDrawable(getResources().getDrawable(R.drawable.red_pawn, null));
 
             //BackHandler gb = new BackHandler();
             //Button back = (Button) findViewById(R.id.back);
@@ -181,6 +192,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //switch turns
+    private void nextTurn(){
+        mGame.newTurn();
+
+        currentPlayer.setText(getString(players.get(mGame.getTurn())));
+        currentPawn.setImageDrawable(getResources().getDrawable(players.get(mGame.getTurn() + "Pawn"), null));
+    }
+
     //shows a message dialog
     private void showWinMsg(String m){
         AlertDialog dialog = new AlertDialog.Builder(this).create();
@@ -269,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             mGame.move(m);
-            mGame.newTurn();
+            nextTurn();
             updatePieces();
             resetHandlers();
         }
@@ -290,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
             Boolean turnOver = selectSpace(v, false);
             if(turnOver) {
                 gameOver();
-                mGame.newTurn();
+                nextTurn();
                 updatePieces();
                 resetHandlers();
             }
