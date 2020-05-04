@@ -4,4 +4,6 @@
     <string name="red">Red</string>
     <string name="blue">Blue</string>
     <string name="new_game">New Game</string>
+    <string name="checkers_title">Checkers</string>
+    <string name="chess_title">Chess</string>
 </resources>
