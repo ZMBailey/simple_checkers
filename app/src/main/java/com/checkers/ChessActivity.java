@@ -24,16 +24,11 @@ import java.util.HashMap;
 
 import static android.R.color.holo_blue_light;
 
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-
 public class ChessActivity extends AppCompatActivity {
 
     public ImageButton[][] spaces;
     public int side = 8;
-    private Game mGame = new Game();
+    private CheckersGame mGame = new CheckersGame();
     private TextView currentPlayer;
     private ImageView currentPawn;
     private HashMap<String,Integer> players = new HashMap<>();

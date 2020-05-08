@@ -1,50 +1,30 @@
 package com.checkers;
+
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import android.util.Log;
 
 /*
     Game Class for Checkers application. Contains primary game logic
     for a checkers game, implementing standard Checkers rules.
  */
 
-public class Game {
+public class ChessGame {
     public Piece [][] pieces = new Piece[8][8];
     private String turn = "Red";
-    private HashMap<String,Integer> blue;
-    private HashMap<String,Integer> red;
 
     //Create new game, places pieces in starting positions
     public void initializeGame(){
         //set up board
         //rows
         turn = "Red";
-        red = new HashMap<>();
-        blue = new HashMap();
-        red.put("Pawn",0);
-        blue.put("Pawn",0);
-        red.put("King",0);
-        blue.put("King",0);
 
         for(int r=0;r<8;r++){
             //columns
             for(int c=0;c<8;c++){
                 //check for black space
-                if(isBlackSpace(r,c)){
-                    if(r<3){
-                        //red side of board
-                        Piece pawn = new Piece("Red","Pawn",r,c,false);
-                        pieces[r][c] = pawn;
-                    }else if(r>4) {
-                        //blue side of board
-                        Piece pawn = new Piece("Blue","Pawn",r,c,false);
-                        pieces[r][c] = pawn;
-                    }else{
-                        pieces[r][c] = null;
-                    }
-                }else{
-                    pieces[r][c] = null;
-                }
+                pieces[r][c] = findPiece(r,c);
             }
         }
     }
@@ -54,20 +34,40 @@ public class Game {
         return turn;
     }
 
-    //subtract one piece
-    public void removePiece(String team,String type){
-        HashMap<String,Integer> score;
-        if(team.equals("Red")){
-            red.put(type,red.get(type) + 1);
-        } else {
-            blue.put(type,blue.get(type) + 1);
-        }
-
-    }
 
     //Check if space at input coordinates is a black space.
-    public Boolean isBlackSpace(int r,int c){
-        return (r % 2 == 0)^(c % 2 == 0);
+    public Piece findPiece(int r,int c){
+        String color = "Black";
+        String rank;
+        if(r<2){
+            color = "Black";
+        }else if(r>5){
+            color = "White";
+        }else{
+            return null;
+        }
+
+        if(r == 0 || r == 7){
+            rank = findRank(c);
+        }else{
+            rank = "Pawn";
+        }
+
+        return new Piece(color,rank,r,c,false);
+    }
+
+    public String findRank(int c){
+        if(c == 0 || c == 7){
+            return "Rook";
+        }else if(c == 1 || c == 6){
+            return "Knight";
+        }else if(c == 2 || c == 5){
+            return "Bishop";
+        }else if(c == 3){
+            return "Queen";
+        }else{
+            return "King";
+        }
     }
 
     //Switch turns between red and blue.
@@ -95,7 +95,6 @@ public class Game {
         move(m);
         int r3 = Math.max(m.r2, m.r1) - 1;
         int c3 = Math.max(m.c2, m.c1) - 1;
-        removePiece(pieces[r3][c3].color, pieces[r3][c3].rank);
         pieces[r3][c3].setTaken();
         pieces[r3][c3] = null;
     }
@@ -104,6 +103,14 @@ public class Game {
     private Boolean isTurn(Move m){
         return pieces[m.r1][m.c1].color.equals(turn);
     }
+
+    //moves for:
+    //Pawn
+    //Rook
+    //Knight
+    //Bishop
+    //Queen
+    //King
 
     //check if the selected space is one or two spaces diagonally, depending on
     //whether or not the move is a jump.
@@ -226,12 +233,6 @@ public class Game {
     }
 
     public String checkForWin(){
-        if(blue.get("Pawn") + blue.get("King") == 12){
-            return "Red";
-        } else if(red.get("Pawn") + red.get("King") == 12){
-            return "Blue";
-        } else {
-            return "None";
-        }
+        return null;
     }
 }

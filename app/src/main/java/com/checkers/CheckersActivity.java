@@ -28,7 +28,7 @@ public class CheckersActivity extends AppCompatActivity {
 
     public ImageButton[][] spaces;
     public int side = 8;
-    private Game mGame = new Game();
+    private CheckersGame mCheckersGame = new CheckersGame();
     private TextView currentPlayer;
     private ImageView currentPawn;
     private HashMap<String,Integer> players = new HashMap<>();
@@ -44,7 +44,7 @@ public class CheckersActivity extends AppCompatActivity {
         players.put("Blue",R.string.blue);
         players.put("RedPawn",R.drawable.red_pawn);
         players.put("BluePawn",R.drawable.blue_pawn);
-        mGame.initializeGame();
+        mCheckersGame.initializeGame();
         makeBoard();
     }
 
@@ -107,13 +107,13 @@ public class CheckersActivity extends AppCompatActivity {
         currentPawn = (ImageView) findViewById(R.id.imagePawn);
         currentPawn.setImageDrawable(getResources().getDrawable(R.drawable.red_pawn, null));
 
-        mGame.initializeGame();
+        mCheckersGame.initializeGame();
         updatePieces();
         resetHandlers();
     }
 
     private int findColor(int r, int c){
-        Piece p = mGame.pieces[r][c];
+        Piece p = mCheckersGame.pieces[r][c];
         if(p != null){
            if(p.color.equals("Blue")){
                if(p.rank.equals("Pawn")) {
@@ -142,7 +142,7 @@ public class CheckersActivity extends AppCompatActivity {
                 String id = Integer.toString(row)+Integer.toString(col);
                 spaces[row][col] = new ImageButton(this);
                 spaces[row][col].setId(View.generateViewId());
-                if (!mGame.isBlackSpace(row, col)) {
+                if (!mCheckersGame.isBlackSpace(row, col)) {
                         //place white space
                     spaces[row][col].setBackground(getResources().getDrawable(android.R.color.white, null));
                 } else {
@@ -176,11 +176,11 @@ public class CheckersActivity extends AppCompatActivity {
         for(int r=0; r< side; r++){
             for(int c=0; c<side; c++) {
                 if(findColor(r,c) != -1) {
-                    if(mGame.pieces[r][c].color.equals(mGame.getTurn())){
+                    if(mCheckersGame.pieces[r][c].color.equals(mCheckersGame.getTurn())){
                         spaces[r][c].setOnClickListener(sh);
                     }
                 }
-                if (mGame.isBlackSpace(r, c)) {
+                if (mCheckersGame.isBlackSpace(r, c)) {
                     spaces[r][c].setBackground(getResources().getDrawable(android.R.color.black, null));
                 }
             }
@@ -189,10 +189,10 @@ public class CheckersActivity extends AppCompatActivity {
 
     //switch turns
     private void nextTurn(){
-        mGame.newTurn();
+        mCheckersGame.newTurn();
 
-        currentPlayer.setText(getString(players.get(mGame.getTurn())));
-        currentPawn.setImageDrawable(getResources().getDrawable(players.get(mGame.getTurn() + "Pawn"), null));
+        currentPlayer.setText(getString(players.get(mCheckersGame.getTurn())));
+        currentPawn.setImageDrawable(getResources().getDrawable(players.get(mCheckersGame.getTurn() + "Pawn"), null));
     }
 
     //shows a message dialog
@@ -207,7 +207,7 @@ public class CheckersActivity extends AppCompatActivity {
     }
 
     private void gameOver(){
-        String winner = mGame.checkForWin();
+        String winner = mCheckersGame.checkForWin();
         if(!winner.equals("None")){
             showWinMsg(winner + " has won! Play again?");
             //show winning/game over dialog
@@ -233,10 +233,10 @@ public class CheckersActivity extends AppCompatActivity {
             }
         }
 
-        ArrayList<Move> moves = mGame.checkForJumps(row,col);
+        ArrayList<Move> moves = mCheckersGame.checkForJumps(row,col);
 
         if(moves.size() == 0 && isMove){
-            moves = mGame.checkForMoves(row,col);
+            moves = mCheckersGame.checkForMoves(row,col);
         }
 
         for(Move m: moves){
@@ -282,7 +282,7 @@ public class CheckersActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            mGame.move(m);
+            mCheckersGame.move(m);
             nextTurn();
             updatePieces();
             resetHandlers();
@@ -298,7 +298,7 @@ public class CheckersActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            mGame.jump(m);
+            mCheckersGame.jump(m);
             updatePieces();
             resetHandlers();
             Boolean turnOver = selectSpace(v, false);
