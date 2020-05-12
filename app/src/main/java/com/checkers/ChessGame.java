@@ -112,29 +112,30 @@ public class ChessGame {
     //Queen
     //King
 
+    //------------------------------------Pawn-----------------------------------
     //check if the selected space is one or two spaces diagonally, depending on
     //whether or not the move is a jump.
-    private Boolean isValidDistance(Move m){
-        int d = 1;
-        if(m.isJump){
-            d = 2;
+    private Boolean checkPawn(Move m, String color){
+
+        if(color.equals("Black") || m.r2 == m.r1 - 1){
+            return true;
+        }else if(color.equals("White") || m.r2 == m.r1 + 1){
+            return true;
+        }else{
+            return false;
         }
-        return ((m.r2 == m.r1+d || m.r2 == m.r1-d) && (m.c2 == m.c1+d || m.c2 == m.c1-d));
+
     }
 
-    //If the piece is not a king then check if the move is forward, depending on the color.
-    private Boolean isValidDirection(Move m){
-        Piece p = pieces[m.r1][m.c1];
+    //------------------------------------Rook------------------------------------
+    private Boolean checkRook(Move m, String color){
 
-        if(!p.rank.equals("King")){
-            if(p.color.equals("Red") && m.r1>=m.r2){
-                return false;
-            }else{
-                return !(p.color.equals("Blue") && m.r1<=m.r2);
-            }
+        if(m.r2 == m.r1 || m.c2 == m.c1){
+            return true
+        }else{
+            return false;
         }
 
-        return true;
     }
 
     //returns true if the selected space is empty, also checks to make sure the space is on the board.
@@ -168,18 +169,21 @@ public class ChessGame {
         //Check valid target space
         //Check empty target space
         //Check direction
-        return (isValidDistance(m) && isValidTarget(m) && isTurn(m) && isValidDirection(m));
+        return (checkPAwn(m) && isValidTarget(m) && isTurn(m));
 
     }
 
-    //calls isValidMove() and also checks if there is a piece that can be jumped.
-    public Boolean isValidJump(Move m){
-        return (isValidMove(m) && isJumpable(m));
-    }
 
-    //Promotes a piece to a king.
-    private Piece makeKing(Piece p){
-        p.rank = "King";
+    //----------------------------------------------------------------
+
+//    //calls isValidMove() and also checks if there is a piece that can be jumped.
+//    public Boolean isValidJump(Move m){
+//        return (isValidMove(m) && isJumpable(m));
+//    }
+
+    //Promotes a piece to a queen.
+    private Piece makeQueen(Piece p){
+        p.rank = "Queen";
         return p;
     }
 
@@ -203,24 +207,24 @@ public class ChessGame {
         return valid_moves;
     }
 
-    //check for valid jumps from a certain space.
-    public ArrayList<Move> checkForJumps(int r, int c){
-        ArrayList<Move> moves = new ArrayList<>();
-        ArrayList<Move> valid_moves = new ArrayList<>();
-
-        moves.add(new Move(r,c,r-2,c-2,true));
-        moves.add(new Move(r,c,r-2,c+2,true));
-        moves.add(new Move(r,c,r+2,c-2,true));
-        moves.add(new Move(r,c,r+2,c+2,true));
-
-        for(Move m : moves){
-            if(isValidJump(m)){
-                valid_moves.add(m);
-            }
-        }
-
-        return valid_moves;
-    }
+//    //check for valid jumps from a certain space.
+//    public ArrayList<Move> checkForJumps(int r, int c){
+//        ArrayList<Move> moves = new ArrayList<>();
+//        ArrayList<Move> valid_moves = new ArrayList<>();
+//
+//        moves.add(new Move(r,c,r-2,c-2,true));
+//        moves.add(new Move(r,c,r-2,c+2,true));
+//        moves.add(new Move(r,c,r+2,c-2,true));
+//        moves.add(new Move(r,c,r+2,c+2,true));
+//
+//        for(Move m : moves){
+//            if(isValidJump(m)){
+//                valid_moves.add(m);
+//            }
+//        }
+//
+//        return valid_moves;
+//    }
 
     //checks if the end space of a move is at the far edge of the board
     //(depends on the piece's color) and if so promotes the piece to a king.
@@ -228,7 +232,7 @@ public class ChessGame {
         Piece p = pieces[m.r1][m.c1];
         if((p.color.equals("Blue") && m.r2 == 0) ||
                 (p.color.equals("Red") && m.r2 == 7)){
-            makeKing(p);
+            makeQueen(p);
         }
     }
 
