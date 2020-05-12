@@ -128,10 +128,28 @@ public class ChessGame {
     }
 
     //------------------------------------Rook------------------------------------
-    private Boolean checkRook(Move m, String color){
+    private Boolean checkRook(Move m){
 
         if(m.r2 == m.r1 || m.c2 == m.c1){
-            return true
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    //------------------------------------Rook------------------------------------
+    private Boolean checkKnight(Move m){
+
+        if((m.r2 == m.r1 + 1 && m.c2 == m.c1 + 2) ||
+                (m.r2 == m.r1 + 1 && m.c2 == m.c1 - 2) ||
+                (m.r2 == m.r1 - 1 && m.c2 == m.c1 + 2) ||
+                (m.r2 == m.r1 - 1 && m.c2 == m.c1 - 2) ||
+                (m.r2 == m.r1 + 2 && m.c2 == m.c1 + 1) ||
+                (m.r2 == m.r1 - 2 && m.c2 == m.c1 + 1) ||
+                (m.r2 == m.r1 + 2 && m.c2 == m.c1 - 1) ||
+                (m.r2 == m.r1 - 2 && m.c2 == m.c1 - 1)){
+            return true;
         }else{
             return false;
         }
@@ -169,7 +187,9 @@ public class ChessGame {
         //Check valid target space
         //Check empty target space
         //Check direction
-        return (checkPAwn(m) && isValidTarget(m) && isTurn(m));
+        Piece p = pieces[m.r1][m.c1];
+
+        return (checkPawn(m, p.color) && isValidTarget(m) && isTurn(m));
 
     }
 
