@@ -9,7 +9,7 @@ import android.util.Log;
  */
 
 public class CheckersGame {
-    public Piece [][] pieces = new Piece[8][8];
+    public CheckersPawn [][] pieces = new CheckersPawn[8][8];
     private String turn = "Red";
     private HashMap<String,Integer> blue;
     private HashMap<String,Integer> red;
@@ -33,11 +33,11 @@ public class CheckersGame {
                 if(isBlackSpace(r,c)){
                     if(r<3){
                         //red side of board
-                        Piece pawn = new Piece("Red","Pawn",r,c,false);
+                        CheckersPawn pawn = new CheckersPawn("Red","Pawn",false);
                         pieces[r][c] = pawn;
                     }else if(r>4) {
                         //blue side of board
-                        Piece pawn = new Piece("Blue","Pawn",r,c,false);
+                        CheckersPawn pawn = new CheckersPawn("Blue","Pawn",false);
                         pieces[r][c] = pawn;
                     }else{
                         pieces[r][c] = null;
@@ -84,10 +84,9 @@ public class CheckersGame {
     //move a piece between two spaces.
     public void move(Move m){
         isKingSpace(m);
-        Piece temp = pieces[m.r2][m.c2];
+        CheckersPawn temp = pieces[m.r2][m.c2];
         pieces[m.r2][m.c2] = pieces[m.r1][m.c1];
         pieces[m.r1][m.c1] = temp;
-        pieces[m.r2][m.c2].setLocation(m.r2,m.c2);
     }
 
     //jump a over an enemy piece and capture it.
@@ -117,7 +116,7 @@ public class CheckersGame {
 
     //If the piece is not a king then check if the move is forward, depending on the color.
     private Boolean isValidDirection(Move m){
-        Piece p = pieces[m.r1][m.c1];
+        CheckersPawn p = pieces[m.r1][m.c1];
 
         if(!p.rank.equals("King")){
             if(p.color.equals("Red") && m.r1>=m.r2){
@@ -171,7 +170,7 @@ public class CheckersGame {
     }
 
     //Promotes a piece to a king.
-    private Piece makeKing(Piece p){
+    private Piece makeKing(CheckersPawn p){
         p.rank = "King";
         return p;
     }
@@ -218,7 +217,7 @@ public class CheckersGame {
     //checks if the end space of a move is at the far edge of the board
     //(depends on the piece's color) and if so promotes the piece to a king.
     public void isKingSpace(Move m){
-        Piece p = pieces[m.r1][m.c1];
+        CheckersPawn p = pieces[m.r1][m.c1];
         if((p.color.equals("Blue") && m.r2 == 0) ||
                 (p.color.equals("Red") && m.r2 == 7)){
             makeKing(p);
