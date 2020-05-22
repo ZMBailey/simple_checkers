@@ -1,49 +1,30 @@
 package com.checkers;
+
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import android.util.Log;
 
 /*
     Game Class for Checkers application. Contains primary game logic
     for a checkers game, implementing standard Checkers rules.
  */
 
-public class Game {
+public class ChessGame {
     public Piece [][] pieces = new Piece[8][8];
     private String turn = "Red";
-    private HashMap<String,Integer> blue;
-    private HashMap<String,Integer> red;
 
     //Create new game, places pieces in starting positions
     public void initializeGame(){
         //set up board
         //rows
-        red = new HashMap<>();
-        blue = new HashMap();
-        red.put("Pawn",11);
-        blue.put("Pawn",11);
-        red.put("King",0);
-        blue.put("King",0);
+        turn = "Red";
 
         for(int r=0;r<8;r++){
             //columns
             for(int c=0;c<8;c++){
                 //check for black space
-                if(isBlackSpace(r,c)){
-                    if(r<3){
-                        //red side of board
-                        Piece pawn = new Piece("Red","Pawn",r,c,false);
-                        pieces[r][c] = pawn;
-                    }else if(r>4) {
-                        //blue side of board
-                        Piece pawn = new Piece("Blue","Pawn",r,c,false);
-                        pieces[r][c] = pawn;
-                    }else{
-                        pieces[r][c] = null;
-                    }
-                }else{
-                    pieces[r][c] = null;
-                }
+                pieces[r][c] = findPiece(r,c);
             }
         }
     }
@@ -53,30 +34,40 @@ public class Game {
         return turn;
     }
 
-    //subtract one piece
-    public void removePiece(String team,String type){
-        HashMap<String,Integer> score;
-        if(team.equals("Red")){
-            red.put(type,red.get(type) - 1);
-        } else {
-            blue.put(type,blue.get(type) - 1);
-        }
-
-    }
-
-    //add one king
-    public void addKing(String team){
-        removePiece(team,"Pawn");
-        if(team.equals("Red")){
-            red.put("King",red.get("King") + 1);
-        } else {
-            blue.put("King",blue.get("King") + 1);
-        }
-    }
 
     //Check if space at input coordinates is a black space.
-    public Boolean isBlackSpace(int r,int c){
-        return (r % 2 == 0)^(c % 2 == 0);
+    public Piece findPiece(int r,int c){
+        String color = "Black";
+        String rank;
+        if(r<2){
+            color = "Black";
+        }else if(r>5){
+            color = "White";
+        }else{
+            return null;
+        }
+
+        if(r == 0 || r == 7){
+            rank = findRank(c);
+        }else{
+            rank = "Pawn";
+        }
+
+        return new Piece(color,rank,r,c,false);
+    }
+
+    public String findRank(int c){
+        if(c == 0 || c == 7){
+            return "Rook";
+        }else if(c == 1 || c == 6){
+            return "Knight";
+        }else if(c == 2 || c == 5){
+            return "Bishop";
+        }else if(c == 3){
+            return "Queen";
+        }else{
+            return "King";
+        }
     }
 
     //Switch turns between red and blue.
@@ -104,7 +95,6 @@ public class Game {
         move(m);
         int r3 = Math.max(m.r2, m.r1) - 1;
         int c3 = Math.max(m.c2, m.c1) - 1;
-        removePiece(pieces[r3][c3].color, pieces[r3][c3].rank);
         pieces[r3][c3].setTaken();
         pieces[r3][c3] = null;
     }
@@ -114,29 +104,56 @@ public class Game {
         return pieces[m.r1][m.c1].color.equals(turn);
     }
 
+    //moves for:
+    //Pawn
+    //Rook
+    //Knight
+    //Bishop
+    //Queen
+    //King
+
+    //------------------------------------Pawn-----------------------------------
     //check if the selected space is one or two spaces diagonally, depending on
     //whether or not the move is a jump.
-    private Boolean isValidDistance(Move m){
-        int d = 1;
-        if(m.isJump){
-            d = 2;
+    private Boolean checkPawn(Move m, String color){
+
+        if(color.equals("Black") || m.r2 == m.r1 - 1){
+            return true;
+        }else if(color.equals("White") || m.r2 == m.r1 + 1){
+            return true;
+        }else{
+            return false;
         }
-        return ((m.r2 == m.r1+d || m.r2 == m.r1-d) && (m.c2 == m.c1+d || m.c2 == m.c1-d));
+
     }
 
-    //If the piece is not a king then check if the move is forward, depending on the color.
-    private Boolean isValidDirection(Move m){
-        Piece p = pieces[m.r1][m.c1];
+    //------------------------------------Rook------------------------------------
+    private Boolean checkRook(Move m){
 
-        if(!p.rank.equals("King")){
-            if(p.color.equals("Red") && m.r1>=m.r2){
-                return false;
-            }else{
-                return !(p.color.equals("Blue") && m.r1<=m.r2);
-            }
+        if(m.r2 == m.r1 || m.c2 == m.c1){
+            return true;
+        }else{
+            return false;
         }
 
-        return true;
+    }
+
+    //------------------------------------Rook------------------------------------
+    private Boolean checkKnight(Move m){
+
+        if((m.r2 == m.r1 + 1 && m.c2 == m.c1 + 2) ||
+                (m.r2 == m.r1 + 1 && m.c2 == m.c1 - 2) ||
+                (m.r2 == m.r1 - 1 && m.c2 == m.c1 + 2) ||
+                (m.r2 == m.r1 - 1 && m.c2 == m.c1 - 2) ||
+                (m.r2 == m.r1 + 2 && m.c2 == m.c1 + 1) ||
+                (m.r2 == m.r1 - 2 && m.c2 == m.c1 + 1) ||
+                (m.r2 == m.r1 + 2 && m.c2 == m.c1 - 1) ||
+                (m.r2 == m.r1 - 2 && m.c2 == m.c1 - 1)){
+            return true;
+        }else{
+            return false;
+        }
+
     }
 
     //returns true if the selected space is empty, also checks to make sure the space is on the board.
@@ -170,19 +187,23 @@ public class Game {
         //Check valid target space
         //Check empty target space
         //Check direction
-        return (isValidDistance(m) && isValidTarget(m) && isTurn(m) && isValidDirection(m));
+        Piece p = pieces[m.r1][m.c1];
+
+        return (checkPawn(m, p.color) && isValidTarget(m) && isTurn(m));
 
     }
 
-    //calls isValidMove() and also checks if there is a piece that can be jumped.
-    public Boolean isValidJump(Move m){
-        return (isValidMove(m) && isJumpable(m));
-    }
 
-    //Promotes a piece to a king.
-    private Piece makeKing(Piece p){
-        p.rank = "King";
-        addKing(p.color);
+    //----------------------------------------------------------------
+
+//    //calls isValidMove() and also checks if there is a piece that can be jumped.
+//    public Boolean isValidJump(Move m){
+//        return (isValidMove(m) && isJumpable(m));
+//    }
+
+    //Promotes a piece to a queen.
+    private Piece makeQueen(Piece p){
+        p.rank = "Queen";
         return p;
     }
 
@@ -206,24 +227,24 @@ public class Game {
         return valid_moves;
     }
 
-    //check for valid jumps from a certain space.
-    public ArrayList<Move> checkForJumps(int r, int c){
-        ArrayList<Move> moves = new ArrayList<>();
-        ArrayList<Move> valid_moves = new ArrayList<>();
-
-        moves.add(new Move(r,c,r-2,c-2,true));
-        moves.add(new Move(r,c,r-2,c+2,true));
-        moves.add(new Move(r,c,r+2,c-2,true));
-        moves.add(new Move(r,c,r+2,c+2,true));
-
-        for(Move m : moves){
-            if(isValidJump(m)){
-                valid_moves.add(m);
-            }
-        }
-
-        return valid_moves;
-    }
+//    //check for valid jumps from a certain space.
+//    public ArrayList<Move> checkForJumps(int r, int c){
+//        ArrayList<Move> moves = new ArrayList<>();
+//        ArrayList<Move> valid_moves = new ArrayList<>();
+//
+//        moves.add(new Move(r,c,r-2,c-2,true));
+//        moves.add(new Move(r,c,r-2,c+2,true));
+//        moves.add(new Move(r,c,r+2,c-2,true));
+//        moves.add(new Move(r,c,r+2,c+2,true));
+//
+//        for(Move m : moves){
+//            if(isValidJump(m)){
+//                valid_moves.add(m);
+//            }
+//        }
+//
+//        return valid_moves;
+//    }
 
     //checks if the end space of a move is at the far edge of the board
     //(depends on the piece's color) and if so promotes the piece to a king.
@@ -231,17 +252,11 @@ public class Game {
         Piece p = pieces[m.r1][m.c1];
         if((p.color.equals("Blue") && m.r2 == 0) ||
                 (p.color.equals("Red") && m.r2 == 7)){
-            makeKing(p);
+            makeQueen(p);
         }
     }
 
     public String checkForWin(){
-        if(blue.get("Pawn") + blue.get("King") == 0){
-            return "Red";
-        } else if(red.get("Pawn") + red.get("King") == 0){
-            return "Blue";
-        } else {
-            return "None";
-        }
+        return null;
     }
 }
