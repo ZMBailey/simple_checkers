@@ -25,6 +25,17 @@ public class CheckersPawn extends Piece {
     public ArrayList<Move> getMoveList(int r, int c) {
         ArrayList<Move> moves = new ArrayList<>();
 
+        moves.add(new Move(r,c,r-1,c-1,false));
+        moves.add(new Move(r,c,r-1,c+1,false));
+        moves.add(new Move(r,c,r+1,c-1,false));
+        moves.add(new Move(r,c,r+1,c+1,false));
+
+        return moves;
+    }
+
+    public ArrayList<Move> getJumpList(int r, int c) {
+        ArrayList<Move> moves = new ArrayList<>();
+
         moves.add(new Move(r,c,r-2,c-2,true));
         moves.add(new Move(r,c,r-2,c+2,true));
         moves.add(new Move(r,c,r+2,c-2,true));
