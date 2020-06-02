@@ -113,7 +113,7 @@ public class CheckersActivity extends AppCompatActivity {
     }
 
     private int findColor(int r, int c){
-        Piece p = mCheckersGame.pieces[r][c];
+        CheckersPawn p = mCheckersGame.pieces[r][c];
         if(p != null){
            if(p.color.equals("Blue")){
                if(p.rank.equals("Pawn")) {

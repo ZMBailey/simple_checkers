@@ -104,70 +104,6 @@ public class CheckersGame {
         return pieces[m.r1][m.c1].color.equals(turn);
     }
 
-    //check if the selected space is one or two spaces diagonally, depending on
-    //whether or not the move is a jump.
-    private Boolean isValidDistance(Move m){
-        int d = 1;
-        if(m.isJump){
-            d = 2;
-        }
-        return ((m.r2 == m.r1+d || m.r2 == m.r1-d) && (m.c2 == m.c1+d || m.c2 == m.c1-d));
-    }
-
-    //If the piece is not a king then check if the move is forward, depending on the color.
-    private Boolean isValidDirection(Move m){
-        CheckersPawn p = pieces[m.r1][m.c1];
-
-        if(!p.rank.equals("King")){
-            if(p.color.equals("Red") && m.r1>=m.r2){
-                return false;
-            }else{
-                return !(p.color.equals("Blue") && m.r1<=m.r2);
-            }
-        }
-
-        return true;
-    }
-
-    //returns true if the selected space is empty, also checks to make sure the space is on the board.
-    private Boolean isValidTarget(Move m){
-        if(m.r2 < 0 || m.c2 < 0 || m.r2 > 7 || m.c2 > 7){
-            return false;
-        }
-
-        return pieces[m.r2][m.c2] == null;
-    }
-
-    //checks if there is a piece to be captured, and makes sure it is of the opposing color.
-    private Boolean isJumpable(Move m){
-        if(m.isJump){
-            int r3 = Math.max(m.r2, m.r1) - 1;
-            int c3 = Math.max(m.c2, m.c1) - 1;
-            if(pieces[r3][c3] == null || (pieces[r3][c3].color.equals(pieces[m.r1][m.c1].color))) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /* check if the input move is a valid move:
-    * if the target space is the correct distance away.
-    * if the target space is empty, and on the board.
-    * if the target space is forward(if the piece is not a king)
-    */
-    public Boolean isValidMove(Move m){
-        //Check valid target space
-        //Check empty target space
-        //Check direction
-        return (isValidDistance(m) && isValidTarget(m) && isTurn(m) && isValidDirection(m));
-
-    }
-
-    //calls isValidMove() and also checks if there is a piece that can be jumped.
-    public Boolean isValidJump(Move m){
-        return (isValidMove(m) && isJumpable(m));
-    }
 
     //Promotes a piece to a king.
     private Piece makeKing(CheckersPawn p){
@@ -177,16 +113,13 @@ public class CheckersGame {
 
     //check for valid moves from a single space.
     public ArrayList<Move> checkForMoves(int r, int c){
-        ArrayList<Move> moves = new ArrayList<>();
-        ArrayList<Move> valid_moves = new ArrayList<>();
 
-        moves.add(new Move(r,c,r-1,c-1,false));
-        moves.add(new Move(r,c,r-1,c+1,false));
-        moves.add(new Move(r,c,r+1,c-1,false));
-        moves.add(new Move(r,c,r+1,c+1,false));
+        ArrayList<Move> valid_moves = new ArrayList<>();
+        ArrayList<Move> moves = pieces[r][c].getMoveList(r,c);
 
         for(Move m : moves){
-            if(isValidMove(m)){
+            CheckersPawn p = pieces[m.r1][m.c1];
+            if(p.isValidMove(m, isTurn(m), pieces[m.r2][m.c2])){
                 valid_moves.add(m);
                 Log.i("move", m.r2 + ", " + m.c2);
             }
@@ -197,16 +130,15 @@ public class CheckersGame {
 
     //check for valid jumps from a certain space.
     public ArrayList<Move> checkForJumps(int r, int c){
-        ArrayList<Move> moves = new ArrayList<>();
-        ArrayList<Move> valid_moves = new ArrayList<>();
 
-        moves.add(new Move(r,c,r-2,c-2,true));
-        moves.add(new Move(r,c,r-2,c+2,true));
-        moves.add(new Move(r,c,r+2,c-2,true));
-        moves.add(new Move(r,c,r+2,c+2,true));
+        ArrayList<Move> valid_moves = new ArrayList<>();
+        ArrayList<Move> moves = pieces[r][c].getMoveList(r,c);
 
         for(Move m : moves){
-            if(isValidJump(m)){
+            CheckersPawn p = pieces[m.r1][m.c1];
+            int r3 = Math.max(m.r2, m.r1) - 1;
+            int c3 = Math.max(m.c2, m.c1) - 1;
+            if(p.isValidJump(m, isTurn(m), pieces[m.r2][m.c2], pieces[r3][c3])){
                 valid_moves.add(m);
             }
         }
