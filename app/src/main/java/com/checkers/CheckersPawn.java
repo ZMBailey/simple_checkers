@@ -2,8 +2,6 @@ package com.checkers;
 
 import java.util.ArrayList;
 
-import com.checkers.Piece;
-
 public class CheckersPawn extends Piece {
 
     public String rank;

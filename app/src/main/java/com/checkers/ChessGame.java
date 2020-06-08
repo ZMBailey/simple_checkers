@@ -49,11 +49,24 @@ public class ChessGame {
 
         if(r == 0 || r == 7){
             rank = findRank(c);
+            switch(rank) {
+                case "Rook":
+                    return new ChessRook(color, false);
+                case "Knight":
+                    return new ChessKnight(color, false);
+                case "Bishop":
+                    return new ChessBishop(color, false);
+                case "Queen":
+                    return new ChessQueen(color, false);
+                case "King":
+                    return new ChessKing(color, false);
+            }
+
         }else{
-            rank = "Pawn";
+            return new ChessPawn(color, false);
         }
 
-        return new Piece(color,rank,r,c,false);
+        return null;
     }
 
     public String findRank(int c){
@@ -87,7 +100,6 @@ public class ChessGame {
         Piece temp = pieces[m.r2][m.c2];
         pieces[m.r2][m.c2] = pieces[m.r1][m.c1];
         pieces[m.r1][m.c1] = temp;
-        pieces[m.r2][m.c2].setLocation(m.r2,m.c2);
     }
 
     //jump a over an enemy piece and capture it.
@@ -201,12 +213,6 @@ public class ChessGame {
 //        return (isValidMove(m) && isJumpable(m));
 //    }
 
-    //Promotes a piece to a queen.
-    private Piece makeQueen(Piece p){
-        p.rank = "Queen";
-        return p;
-    }
-
     //check for valid moves from a single space.
     public ArrayList<Move> checkForMoves(int r, int c){
         ArrayList<Move> moves = new ArrayList<>();
@@ -252,7 +258,7 @@ public class ChessGame {
         Piece p = pieces[m.r1][m.c1];
         if((p.color.equals("Blue") && m.r2 == 0) ||
                 (p.color.equals("Red") && m.r2 == 7)){
-            makeQueen(p);
+            //makeQueen(p);
         }
     }
 
