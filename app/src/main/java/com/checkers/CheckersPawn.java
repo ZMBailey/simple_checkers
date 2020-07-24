@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 public class CheckersPawn extends Piece {
 
-    public String rank;
-
     public CheckersPawn(String color, String rank, Boolean taken){
         super(color,taken);
         this.rank = rank;

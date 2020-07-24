@@ -112,21 +112,47 @@ public class ChessActivity extends AppCompatActivity {
         resetHandlers();
     }
 
+    public int findRankBlack(String rank){
+        switch(rank) {
+            case "Pawn":
+                return R.drawable.black_pawn;
+            case "Rook":
+                return R.drawable.black_rook;
+            case "Knight":
+                return R.drawable.black_knight;
+            case "Bishop":
+                return R.drawable.black_bishop;
+            case "Queen":
+                return R.drawable.black_queen;
+            case "King":
+                return R.drawable.black_king;
+        }
+    }
+
+    public int findRankWhite(String rank){
+        switch(rank) {
+            case "Pawn":
+                return R.drawable.white_pawn;
+            case "Rook":
+                return R.drawable.white_rook;
+            case "Knight":
+                return R.drawable.white_knight;
+            case "Bishop":
+                return R.drawable.white_bishop;
+            case "Queen":
+                return R.drawable.white_queen;
+            case "King":
+                return R.drawable.white_king;
+        }
+    }
+
     private int findColor(int r, int c){
         Piece p = mGame.pieces[r][c];
         if(p != null){
-            if(p.color.equals("Blue")){
-                if(p.rank.equals("Pawn")) {
-                    return R.drawable.blue_pawn;
-                } else {
-                    return R.drawable.blue_king;
-                }
+            if(p.color.equals("Black")){
+                findRankBlack(p.rank);
             }else{
-                if(p.rank.equals("Pawn")) {
-                    return R.drawable.red_pawn;
-                } else {
-                    return R.drawable.red_king;
-                }
+                findRankWhite(p.rank);
             }
         }
 

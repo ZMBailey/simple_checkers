@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public abstract class Piece {
     public String color;
     public boolean isTaken;
+    public String rank;
 
     public Piece(String color, boolean taken){
             this.color = color;
