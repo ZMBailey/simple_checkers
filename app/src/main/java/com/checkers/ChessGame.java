@@ -83,12 +83,12 @@ public class ChessGame {
         }
     }
 
-    //Switch turns between red and blue.
+    //Switch turns between black and white.
     public String newTurn(){
-        if(turn.equals("Red")){
-            turn = "Blue";
+        if(turn.equals("White")){
+            turn = "Black";
         } else {
-            turn = "Red";
+            turn = "White";
         }
 
         return turn;
@@ -127,17 +127,7 @@ public class ChessGame {
     //------------------------------------Pawn-----------------------------------
     //check if the selected space is one or two spaces diagonally, depending on
     //whether or not the move is a jump.
-    private Boolean checkPawn(Move m, String color){
 
-        if(color.equals("Black") || m.r2 == m.r1 - 1){
-            return true;
-        }else if(color.equals("White") || m.r2 == m.r1 + 1){
-            return true;
-        }else{
-            return false;
-        }
-
-    }
 
     //------------------------------------Rook------------------------------------
     private Boolean checkRook(Move m){
@@ -201,7 +191,7 @@ public class ChessGame {
         //Check direction
         Piece p = pieces[m.r1][m.c1];
 
-        return (checkPawn(m, p.color) && isValidTarget(m) && isTurn(m));
+        return (isValidTarget(m) && isTurn(m));
 
     }
 

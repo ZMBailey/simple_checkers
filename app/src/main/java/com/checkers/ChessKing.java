@@ -3,6 +3,7 @@ package com.checkers;
 import java.util.ArrayList;
 
 public class ChessKing extends Piece {
+    public final String rank = "King";
 
     public ChessKing(String color, Boolean taken){
         super(color,taken);

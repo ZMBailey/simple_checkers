@@ -127,6 +127,8 @@ public class ChessActivity extends AppCompatActivity {
             case "King":
                 return R.drawable.black_king;
         }
+
+        return 0;
     }
 
     public int findRankWhite(String rank){
@@ -144,15 +146,17 @@ public class ChessActivity extends AppCompatActivity {
             case "King":
                 return R.drawable.white_king;
         }
+
+        return 0;
     }
 
     private int findColor(int r, int c){
         Piece p = mGame.pieces[r][c];
         if(p != null){
             if(p.color.equals("Black")){
-                findRankBlack(p.rank);
+                return findRankBlack(p.rank);
             }else{
-                findRankWhite(p.rank);
+                return findRankWhite(p.rank);
             }
         }
 
