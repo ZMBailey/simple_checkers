@@ -30,11 +30,30 @@ public class ChessPawn extends Piece {
 
     @Override
     public ArrayList<Move> getMoveList(int r, int c) {
-        return null;
+        ArrayList<Move> moveList = new ArrayList<>();
+        int r2;
+        if(color.equals("Black")){
+            r2 = r-1;
+        }else{
+            r2 = r+1;
+        }
+        moveList.add(new Move(r,c,r2,c,false));
+
+        return moveList;
     }
 
     public ArrayList<Move> getJumpList(int r, int c) {
-        return null;
+        ArrayList<Move> moveList = new ArrayList<>();
+        int r2;
+        if(color.equals("Black")){
+            r2 = r-1;
+        }else{
+            r2 = r+1;
+        }
+        moveList.add(new Move(r,c,r2,c+1,true));
+        moveList.add(new Move(r,c,r2,c-1,true));
+
+        return moveList;
     }
 
     private Boolean isValidDirection(Move m){
