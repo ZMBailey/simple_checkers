@@ -1,7 +1,5 @@
 package com.checkers;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 
 public class ChessPawn extends Piece {
