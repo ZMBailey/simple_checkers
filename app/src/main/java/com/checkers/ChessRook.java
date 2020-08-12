@@ -10,12 +10,12 @@ public class ChessRook extends Piece {
     }
 
     @Override
-    public Boolean isValidMove(Move m, Boolean turn, Piece p2) {
+    public Boolean isValidMove(Move m, Piece p2) {
         return null;
     }
 
     @Override
-    public ArrayList<Move> getMoveList(int r, int c) {
+    public ArrayList<Move> getMoveList(int r, int c, Piece [][] pieces) {
         return null;
     }
 }

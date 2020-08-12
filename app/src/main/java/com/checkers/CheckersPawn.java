@@ -10,15 +10,15 @@ public class CheckersPawn extends Piece {
     }
 
     @Override
-    public Boolean isValidMove(Move m, Boolean turn, Piece p2) {
+    public Boolean isValidMove(Move m, Piece p2) {
         //Check valid target space
         //Check empty target space
         //Check direction
-        return (isValidDistance(m) && isValidTarget(m, p2) && turn && isValidDirection(m));
+        return (isValidDistance(m) && isValidTarget(m, p2) && isValidDirection(m));
     }
 
     @Override
-    public ArrayList<Move> getMoveList(int r, int c) {
+    public ArrayList<Move> getMoveList(int r, int c, Piece [][] pieces) {
         ArrayList<Move> moves = new ArrayList<>();
 
         moves.add(new Move(r,c,r-1,c-1,false));
@@ -91,8 +91,8 @@ public class CheckersPawn extends Piece {
      */
 
     //calls isValidMove() and also checks if there is a piece that can be jumped.
-    public Boolean isValidJump(Move m, Boolean turn, CheckersPawn p2, CheckersPawn p3){
-        return (isValidMove(m, turn, p2) && isJumpable(m, p3));
+    public Boolean isValidJump(Move m, CheckersPawn p2, CheckersPawn p3){
+        return (isValidMove(m, p2) && isJumpable(m, p3));
     }
 
 }

@@ -16,7 +16,7 @@ public abstract class Piece {
         isTaken = true;
     }
 
-    public abstract Boolean isValidMove(Move m, Boolean turn, Piece p2);
+    public abstract Boolean isValidMove(Move m, Piece p2);
 
-    public abstract ArrayList<Move> getMoveList(int r, int c);
+    public abstract ArrayList<Move> getMoveList(int r, int c, Piece [][] pieces);
 }

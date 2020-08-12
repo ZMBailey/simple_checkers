@@ -1,5 +1,7 @@
 package com.checkers;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 public class ChessPawn extends Piece {
@@ -10,11 +12,11 @@ public class ChessPawn extends Piece {
     }
 
     @Override
-    public Boolean isValidMove(Move m, Boolean turn, Piece p2) {
-        return (isValidDirection(m) && isValidTarget(m, p2) && turn);
+    public Boolean isValidMove(Move m, Piece p2) {
+        return (isValidDirection(m) && isValidTarget(m, p2));
     }
 
-    private Boolean isValidJump(Move m, Boolean turn, Piece p2){
+    private Boolean isValidJump(Move m, Piece p2){
         String otherColor;
         if(p2 != null){
             otherColor = p2.color;
@@ -22,38 +24,39 @@ public class ChessPawn extends Piece {
             return false;
         }
 
-        if(isValidColumn(m) && isValidRow(m,otherColor) && turn){
+        if(isValidColumn(m) && isValidRow(m,otherColor)){
             return isValidJumpTarget(otherColor);
         }
         return false;
     }
 
     @Override
-    public ArrayList<Move> getMoveList(int r, int c) {
-        ArrayList<Move> moveList = new ArrayList<>();
+    public ArrayList<Move> getMoveList(int r, int c, Piece [][] pieces) {
+        ArrayList<Move> valid_moves = new ArrayList<>();
         int r2;
         if(color.equals("Black")){
             r2 = r-1;
         }else{
             r2 = r+1;
         }
-        moveList.add(new Move(r,c,r2,c,false));
+        Move m = new Move(r,c,r2,c,false);
 
-        return moveList;
-    }
-
-    public ArrayList<Move> getJumpList(int r, int c) {
-        ArrayList<Move> moveList = new ArrayList<>();
-        int r2;
-        if(color.equals("Black")){
-            r2 = r-1;
-        }else{
-            r2 = r+1;
+        if(isValidMove(m, pieces[r2][c])){
+            valid_moves.add(m);
         }
-        moveList.add(new Move(r,c,r2,c+1,true));
-        moveList.add(new Move(r,c,r2,c-1,true));
 
-        return moveList;
+        Move j1 = new Move(r,c,r2,c+1,true);
+        Move j2 = new Move(r,c,r2,c-1,true);
+
+        if(isValidJump(j1, pieces[r2][c+1])){
+            valid_moves.add(m);
+        }
+
+        if(isValidJump(j2, pieces[r2][c-1])){
+            valid_moves.add(m);
+        }
+
+        return valid_moves;
     }
 
     private Boolean isValidDirection(Move m){
