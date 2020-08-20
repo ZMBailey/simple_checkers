@@ -115,12 +115,12 @@ public class CheckersGame {
     public ArrayList<Move> checkForMoves(int r, int c){
 
         ArrayList<Move> valid_moves = new ArrayList<>();
-        ArrayList<Move> moves = pieces[r][c].getMoveList(r,c);
+        ArrayList<Move> moves = pieces[r][c].getMoveList(r,c,pieces);
 
 
         for(Move m : moves){
             CheckersPawn p = pieces[m.r1][m.c1];
-            if(p.isValidMove(m, isTurn(m), pieces[m.r2][m.c2])){
+            if(p.isValidMove(m, pieces[m.r2][m.c2])){
                 valid_moves.add(m);
                 Log.i("move", m.r2 + ", " + m.c2);
             }
@@ -139,7 +139,7 @@ public class CheckersGame {
             CheckersPawn p = pieces[m.r1][m.c1];
             int r3 = Math.max(m.r2, m.r1) - 1;
             int c3 = Math.max(m.c2, m.c1) - 1;
-            if(p.isValidJump(m, isTurn(m), pieces[m.r2][m.c2], pieces[r3][c3])){
+            if(p.isValidJump(m, pieces[m.r2][m.c2], pieces[r3][c3])){
                 valid_moves.add(m);
             }
         }

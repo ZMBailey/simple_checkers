@@ -15,17 +15,51 @@ public class ChessRook extends Piece {
         return null;
     }
 
-    private ArrayList<Move> checkLeft(int r, int c, Piece [][] pieces){
+    private ArrayList<Move> checkDirection(int r, int c, Piece [][] pieces, String dir){
 
         ArrayList<Move> valid = new ArrayList<>();
-        if(c<1){
-            return valid;
+
+        int[] m2 = new int[2];
+        int pos = 0;
+        Boolean increment = isInc(dir);
+
+        switch (dir) {
+            case "Left":
+                if (c < 1) {
+                    return valid;
+                }
+
+                m2[1] = c - 1;
+                pos = 1;
+                break;
+            case "Right":
+                if(c>6){
+                    return valid;
+                }
+
+                m2[1] = c+1;
+                pos = 1;
+                break;
+            case "Up":
+                if(r>6){
+                    return valid;
+                }
+
+                m2[0] = r+1;
+                pos = 0;
+                break;
+            case "Down":
+                if(r<1){
+                    return valid;
+                }
+
+                m2[0] = r-1;
+                pos = 0;
+                break;
         }
 
-        int c2 = c-1;
-
-        while(c2>=0){
-            Move m = new Move(r,c,r,c2,false);
+        while(checkEdge(m2[pos],dir)){
+            Move m = new Move(r,c,m2[0],m2[1],false);
             if(isValidMove(m, pieces[m.r2][m.c2])){
                 if(isEnemy(pieces[m.r2][m.c2])){
                     m.isJump = true;
@@ -34,85 +68,32 @@ public class ChessRook extends Piece {
                 }
                 valid.add(m);
             }
-            c2--;
+            if(increment){
+                m2[pos]++;
+            }else{
+                m2[pos]--;
+            }
         }
 
         return valid;
     }
 
-    private ArrayList<Move> checkRight(int r, int c, Piece [][] pieces){
-
-        ArrayList<Move> valid = new ArrayList<>();
-        if(c>6){
-            return valid;
+    private Boolean isInc(String dir){
+        if(dir.equals("Up") || dir.equals("Right")) {
+            return true;
+        }else{
+            return false;
         }
-
-        int c2 = c+1;
-
-        while(c2<=7){
-            Move m = new Move(r,c,r,c2,false);
-            if(isValidMove(m, pieces[m.r2][m.c2])){
-                if(isEnemy(pieces[m.r2][m.c2])){
-                    m.isJump = true;
-                    valid.add(m);
-                    return valid;
-                }
-                valid.add(m);
-            }
-            c2++;
-        }
-
-        return valid;
     }
 
-    private ArrayList<Move> checkUp(int r, int c, Piece [][] pieces){
-
-        ArrayList<Move> valid = new ArrayList<>();
-        if(r>6){
-            return valid;
+    private Boolean checkEdge(int pos, String dir){
+        if(dir.equals("Left") || dir.equals("Down")){
+            return pos>=0;
+        }else if(dir.equals("Right") || dir.equals("Up")){
+            return pos<=7;
+        }else{
+            return false;
         }
-
-        int r2 = r+1;
-
-        while(r2>=0){
-            Move m = new Move(r,c,r2,c,false);
-            if(isValidMove(m, pieces[m.r2][m.c2])){
-                if(isEnemy(pieces[m.r2][m.c2])){
-                    m.isJump = true;
-                    valid.add(m);
-                    return valid;
-                }
-                valid.add(m);
-            }
-            r2++;
-        }
-
-        return valid;
-    }
-
-    private ArrayList<Move> checkDown(int r, int c, Piece [][] pieces){
-
-        ArrayList<Move> valid = new ArrayList<>();
-        if(r<1){
-            return valid;
-        }
-
-        int r2 = r-1;
-
-        while(r2>=0){
-            Move m = new Move(r,c,r2,c,false);
-            if(isValidMove(m, pieces[m.r2][m.c2])){
-                if(isEnemy(pieces[m.r2][m.c2])){
-                    m.isJump = true;
-                    valid.add(m);
-                    return valid;
-                }
-                valid.add(m);
-            }
-            r2--;
-        }
-
-        return valid;
     }
 
     private Boolean isEnemy(Piece p){
@@ -127,10 +108,10 @@ public class ChessRook extends Piece {
     public ArrayList<Move> getMoveList(int r, int c, Piece [][] pieces) {
 
         ArrayList<Move> valid_moves = new ArrayList<>();
-        ArrayList<Move> left = checkLeft(r,c,pieces);
-        ArrayList<Move> right = checkRight(r,c,pieces);
-        ArrayList<Move> up = checkUp(r,c,pieces);
-        ArrayList<Move> down = checkDown(r,c,pieces);
+        ArrayList<Move> left = checkDirection(r,c,pieces,"Left");
+        ArrayList<Move> right = checkDirection(r,c,pieces, "Right");
+        ArrayList<Move> up = checkDirection(r,c,pieces, "Up");
+        ArrayList<Move> down = checkDirection(r,c,pieces, "Down");
 
         valid_moves.addAll(left);
         valid_moves.addAll(right);
