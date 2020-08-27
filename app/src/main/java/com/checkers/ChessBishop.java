@@ -30,8 +30,30 @@ public class ChessBishop extends Piece {
             }
 
             c2 = c - 1;
-            r2 = r+1;
+            r2 = r + 1;
             pos = 1;
+        }else if(dir.equals("Left") && virt.equals("Down")){
+            if (c < 1 && r < 1) {
+                return valid;
+            }
+
+            c2 = c - 1;
+            r2 = r - 1;
+            pos = 1;
+        }else if(dir.equals("Right") && virt.equals("Up")) {
+            if (c > 6 && r > 6) {
+                return valid;
+            }
+
+            c2 = c + 1;
+            r2 = r + 1;
+        }else if(dir.equals("Right") && virt.equals("Down")) {
+            if (c > 6 && r < 1) {
+                return valid;
+            }
+
+            c2 = c + 1;
+            r2 = r - 1;
         }
 
 //        switch (dir) {
