@@ -14,48 +14,60 @@ public class ChessBishop extends Piece {
         return null;
     }
 
-    private ArrayList<Move> checkDirection(int r, int c, Piece [][] pieces, String dir){
+    private ArrayList<Move> checkDirection(int r, int c, Piece [][] pieces, String dir, String virt){
 
         ArrayList<Move> valid = new ArrayList<>();
 
         int[] m2 = new int[2];
         int pos = 0;
+        int r2 = r;
+        int c2 = c;
         Boolean increment = isInc(dir);
 
-        switch (dir) {
-            case "Left":
-                if (c < 1) {
-                    return valid;
-                }
+        if(dir.equals("Left") && virt.equals("Up")){
+            if (c < 1 && r > 6) {
+                return valid;
+            }
 
-                m2[1] = c - 1;
-                pos = 1;
-                break;
-            case "Right":
-                if(c>6){
-                    return valid;
-                }
-
-                m2[1] = c+1;
-                pos = 1;
-                break;
-            case "Up":
-                if(r>6){
-                    return valid;
-                }
-
-                m2[0] = r+1;
-                pos = 0;
-                break;
-            case "Down":
-                if(r<1){
-                    return valid;
-                }
-
-                m2[0] = r-1;
-                pos = 0;
-                break;
+            c2 = c - 1;
+            r2 = r+1;
+            pos = 1;
         }
+
+//        switch (dir) {
+//            case "Left":
+//                if (c < 1) {
+//                    return valid;
+//                }
+//
+//                m2[1] = c - 1;
+//                pos = 1;
+//                break;
+//            case "Right":
+//                if(c>6){
+//                    return valid;
+//                }
+//
+//                m2[1] = c+1;
+//                pos = 1;
+//                break;
+//            case "Up":
+//                if(r>6){
+//                    return valid;
+//                }
+//
+//                m2[0] = r+1;
+//                pos = 0;
+//                break;
+//            case "Down":
+//                if(r<1){
+//                    return valid;
+//                }
+//
+//                m2[0] = r-1;
+//                pos = 0;
+//                break;
+//        }
 
         while(checkEdge(m2[pos],dir)){
             Move m = new Move(r,c,m2[0],m2[1],false);
