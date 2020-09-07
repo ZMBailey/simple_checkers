@@ -57,41 +57,6 @@ public class ChessBishop extends Piece {
             r2 = r - 1;
         }
 
-//        switch (dir) {
-//            case "Left":
-//                if (c < 1) {
-//                    return valid;
-//                }
-//
-//                m2[1] = c - 1;
-//                pos = 1;
-//                break;
-//            case "Right":
-//                if(c>6){
-//                    return valid;
-//                }
-//
-//                m2[1] = c+1;
-//                pos = 1;
-//                break;
-//            case "Up":
-//                if(r>6){
-//                    return valid;
-//                }
-//
-//                m2[0] = r+1;
-//                pos = 0;
-//                break;
-//            case "Down":
-//                if(r<1){
-//                    return valid;
-//                }
-//
-//                m2[0] = r-1;
-//                pos = 0;
-//                break;
-//        }
-
         while(checkEdge(c2,dir1) && checkEdge(r2,dir2)){
             Move m = new Move(r,c,r2,c2,false);
             if(isEnemy(pieces[m.r2][m.c2])){
