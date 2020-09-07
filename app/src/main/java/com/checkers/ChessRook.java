@@ -60,14 +60,12 @@ public class ChessRook extends Piece {
 
         while(checkEdge(m2[pos],dir)){
             Move m = new Move(r,c,m2[0],m2[1],false);
-            if(isValidMove(m, pieces[m.r2][m.c2])){
-                if(isEnemy(pieces[m.r2][m.c2])){
-                    m.isJump = true;
-                    valid.add(m);
-                    return valid;
-                }
+            if(isEnemy(pieces[m.r2][m.c2])){
+                m.isJump = true;
                 valid.add(m);
+                return valid;
             }
+            valid.add(m);
             if(increment){
                 m2[pos]++;
             }else{

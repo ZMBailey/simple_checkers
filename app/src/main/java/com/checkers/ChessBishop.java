@@ -14,7 +14,7 @@ public class ChessBishop extends Piece {
         return null;
     }
 
-    private ArrayList<Move> checkDirection(int r, int c, Piece [][] pieces, String dir, String virt){
+    private ArrayList<Move> checkDirection(int r, int c, Piece [][] pieces, String dir1, String dir2){
 
         ArrayList<Move> valid = new ArrayList<>();
 
@@ -22,9 +22,10 @@ public class ChessBishop extends Piece {
         int pos = 0;
         int r2 = r;
         int c2 = c;
-        Boolean increment = isInc(dir);
+        Boolean inc_col = isInc(dir1);
+        Boolean inc_row = isInc(dir2);
 
-        if(dir.equals("Left") && virt.equals("Up")){
+        if(dir1.equals("Left") && dir2.equals("Up")){
             if (c < 1 && r > 6) {
                 return valid;
             }
@@ -32,7 +33,7 @@ public class ChessBishop extends Piece {
             c2 = c - 1;
             r2 = r + 1;
             pos = 1;
-        }else if(dir.equals("Left") && virt.equals("Down")){
+        }else if(dir1.equals("Left") && dir2.equals("Down")){
             if (c < 1 && r < 1) {
                 return valid;
             }
@@ -40,14 +41,14 @@ public class ChessBishop extends Piece {
             c2 = c - 1;
             r2 = r - 1;
             pos = 1;
-        }else if(dir.equals("Right") && virt.equals("Up")) {
+        }else if(dir1.equals("Right") && dir2.equals("Up")) {
             if (c > 6 && r > 6) {
                 return valid;
             }
 
             c2 = c + 1;
             r2 = r + 1;
-        }else if(dir.equals("Right") && virt.equals("Down")) {
+        }else if(dir1.equals("Right") && dir2.equals("Down")) {
             if (c > 6 && r < 1) {
                 return valid;
             }
@@ -91,32 +92,31 @@ public class ChessBishop extends Piece {
 //                break;
 //        }
 
-        while(checkEdge(m2[pos],dir)){
-            Move m = new Move(r,c,m2[0],m2[1],false);
-            if(isValidMove(m, pieces[m.r2][m.c2])){
-                if(isEnemy(pieces[m.r2][m.c2])){
-                    m.isJump = true;
-                    valid.add(m);
-                    return valid;
-                }
+        while(checkEdge(c2,dir1) && checkEdge(r2,dir2)){
+            Move m = new Move(r,c,r2,c2,false);
+            if(isEnemy(pieces[m.r2][m.c2])){
+                m.isJump = true;
                 valid.add(m);
+                return valid;
             }
-            if(increment){
-                m2[pos]++;
-            }else{
-                m2[pos]--;
-            }
+            valid.add(m);
+            r2 = nextSpace(r2,inc_row);
+            c2 = nextSpace(c2,inc_col);
         }
 
         return valid;
     }
 
-    private Boolean isInc(String dir){
-        if(dir.equals("Up") || dir.equals("Right")) {
-            return true;
+    private int nextSpace(int a,Boolean inc){
+        if(inc){
+            return a+1;
         }else{
-            return false;
+            return a-1;
         }
+    }
+
+    private Boolean isInc(String dir){
+        return (dir.equals("Up") || dir.equals("Right"));
     }
 
     private Boolean checkEdge(int pos, String dir){
