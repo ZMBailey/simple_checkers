@@ -80,31 +80,20 @@ public class ChessBishop extends Piece {
         }
     }
 
-    private Boolean isInc(String dir){
-        return (dir.equals("Up") || dir.equals("Right"));
-    }
-
-    private Boolean checkEdge(int pos, String dir){
-        if(dir.equals("Left") || dir.equals("Down")){
-            return pos>=0;
-        }else if(dir.equals("Right") || dir.equals("Up")){
-            return pos<=7;
-        }else{
-            return false;
-        }
-    }
-
-    private Boolean isEnemy(Piece p){
-        if(p == null){
-            return false;
-        }
-
-        return !color.equals(p.color);
-    }
-
     @Override
     public ArrayList<Move> getMoveList(int r, int c, Piece [][] pieces) {
-        return null;
+        ArrayList<Move> valid_moves = new ArrayList<>();
+        ArrayList<Move> left_down = checkDirection(r,c,pieces,"Left", "Down");
+        ArrayList<Move> left_up = checkDirection(r,c,pieces, "Left", "UP");
+        ArrayList<Move> right_down = checkDirection(r,c,pieces, "Right", "Down");
+        ArrayList<Move> right_up = checkDirection(r,c,pieces, "Right", "Up");
+
+        valid_moves.addAll(left_down);
+        valid_moves.addAll(left_up);
+        valid_moves.addAll(right_down);
+        valid_moves.addAll(right_up);
+
+        return valid_moves;
     }
 
 }

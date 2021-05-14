@@ -76,32 +76,6 @@ public class ChessRook extends Piece {
         return valid;
     }
 
-    private Boolean isInc(String dir){
-        if(dir.equals("Up") || dir.equals("Right")) {
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    private Boolean checkEdge(int pos, String dir){
-        if(dir.equals("Left") || dir.equals("Down")){
-            return pos>=0;
-        }else if(dir.equals("Right") || dir.equals("Up")){
-            return pos<=7;
-        }else{
-            return false;
-        }
-    }
-
-    private Boolean isEnemy(Piece p){
-        if(p == null){
-            return false;
-        }
-
-        return !color.equals(p.color);
-    }
-
     @Override
     public ArrayList<Move> getMoveList(int r, int c, Piece [][] pieces) {
 
