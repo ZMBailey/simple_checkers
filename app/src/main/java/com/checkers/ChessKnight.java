@@ -11,11 +11,43 @@ public class ChessKnight extends Piece {
 
     @Override
     public Boolean isValidMove(Move m, Piece p2) {
-        return null;
+
+        if(p2 == null){
+            return true;
+        }
+
+        return isEnemy(p2);
     }
 
     @Override
     public ArrayList<Move> getMoveList(int r, int c, Piece [][] pieces) {
-        return null;
+
+        Piece p2 = null;
+
+        ArrayList<Move> valid_moves = new ArrayList<>();
+        ArrayList<Move> possible_moves = new ArrayList<>();
+        possible_moves.add(new Move(r,c,r+2,c+1,false));
+        possible_moves.add(new Move(r,c,r+2,c-1,false));
+
+        possible_moves.add(new Move(r,c,r-2,c-1,false));
+        possible_moves.add(new Move(r,c,r-2,c-1,false));
+
+        possible_moves.add(new Move(r,c,r+1,c-2,false));
+        possible_moves.add(new Move(r,c,r+1,c+2,false));
+
+        possible_moves.add(new Move(r,c,r-1,c-2,false));
+        possible_moves.add(new Move(r,c,r-1,c+2,false));
+
+        for(Move m: possible_moves){
+            p2 = pieces[m.r2][m.c2];
+            if(isValidMove(m,p2)){
+                if(isEnemy(p2)){
+                    m.isJump = true;
+                }
+                valid_moves.add(m);
+            }
+        }
+
+        return valid_moves;
     }
 }
