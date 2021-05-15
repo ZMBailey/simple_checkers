@@ -22,7 +22,7 @@ public class ChessKnight extends Piece {
     @Override
     public ArrayList<Move> getMoveList(int r, int c, Piece [][] pieces) {
 
-        Piece p2 = null;
+        Piece p2;
 
         ArrayList<Move> valid_moves = new ArrayList<>();
         ArrayList<Move> possible_moves = new ArrayList<>();
