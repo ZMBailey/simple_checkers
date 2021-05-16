@@ -23,7 +23,7 @@ public class ChessPawn extends Piece {
         }
 
         if(isValidColumn(m) && isValidRow(m,otherColor)){
-            return isValidJumpTarget(otherColor);
+            return isEnemy(p2);
         }
         return false;
     }
@@ -86,13 +86,4 @@ public class ChessPawn extends Piece {
         return ((m.r2 == m.r1-1) && color.equals("Black")) || ((m.r2 == m.r1+1) && color.equals("White"));
     }
 
-    private Boolean isValidJumpTarget(String otherColor){
-        if(color.equals("Black") && otherColor.equals("White")){
-            return true;
-        }else if(color.equals("White") && otherColor.equals("Black")){
-            return true;
-        }else{
-            return false;
-        }
-    }
 }
